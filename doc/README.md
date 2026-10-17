@@ -1,56 +1,60 @@
-# Lab1 Phase 1：SVG 編輯器（CLI）
+# Lab1 Phase 1：SVG 编辑器（CLI）
 
-## 架構方案
+## 架构方案
 
-### 1. 模塊劃分
+### 1. 模块划分
 
 ```text
 src/
-  model/        領域模型：圖形樹 + 文檔（不依賴其他任何模塊）
-  factory/      圖形工廠：類型名 -> 圖形類（第 2 處按名字分派）
-  command/      編輯命令 + 撤銷歷史（Command 模式）
-  app/          編輯會話外觀 + 端口接口（Facade，依賴倒置）
-  io/           SVG 解析/序列化 + 文件讀寫（實現 app 的端口）
+  model/        领域模型：图形树 + 文档（不依赖其他任何模块）
+  factory/      图形工厂：类型名 -> 图形类（第 2 处按名字分派）
+  command/      编辑命令 + 撤销历史（Command 模式）
+  app/          编辑会话外观 + 端口接口（Facade，依赖倒置）
+  io/           SVG 解析/序列化 + 文件读写（实现 app 的端口）
   view/         tree/show 文本渲染（Visitor）
-  cli/          REPL、分詞、命令名分派（第 1 處按名字分派）
-  main.ts       組裝入口（Composition Root）
+  cli/          REPL、分词、命令名分派（第 1 处按名字分派）
+  main.ts       组装入口（Composition Root）
 ```
 
-#### 各模塊職責
+#### 各模块职责
 
 - **model**
-  - `Shape`（抽象類，Composite 中的 Component）：提供 `id`、`parent`、`move(dx,dy)`、`scale(f)`、`setAttr/getAttr`、`attrNames()`（`set` 命令的白名單）、`accept(visitor)`。
-  - 葉子圖形：`RectShape`、`CircleShape`、`EllipseShape`、`LineShape`、`TextShape`。
-  - `GroupShape`（Composite）：管理子節點的插入、摘出和 z-order；`move/scale` 遞歸作用到子節點。
-  - `SvgDocument`：包含畫布尺寸、根節點和 `IdIndex`，負責 id 唯一性和按 id 查找。
-  - `ShapeVisitor` 接口，以及 `EditorError` 系列錯誤類（`NoSuchShapeError`、`IdExistsError` 等，只帶消息，不帶 `error:` 前綴）。
-  - 約束：不出現 `console`、`fs`、`readline`，也不出現 `switch(tag)`。
+  - `Shape`（抽象类，Composite 中的 Component），提供：
+    - 身份与结构：`id`、`parent`、`children()`（叶子返回空列表，使容器与叶子可被统一遍历）。
+    - 统一操作：`move(dx,dy)`、`scale(f)`、`setAttr/getAttr`、`attrNames()`（`set` 命令的白名单）。
+    - **自描述（供序列化）**：`tagName`（SVG 标签名）、`attributes()`（按序输出的 SVG 属性键值对）、`textContent()`（`<text>` 的文本内容，其余类型返回 `undefined`）。
+    - `accept(visitor)`：仅供 view 使用。
+  - 叶子图形：`RectShape`、`CircleShape`、`EllipseShape`、`LineShape`、`TextShape`。
+  - `GroupShape`（Composite）：管理子节点的插入、摘出和 z-order；`move/scale` 递归作用到子节点。
+  - `SvgDocument`：包含画布尺寸、根节点和 `IdIndex`，负责 id 唯一性和按 id 查找。
+  - `ShapeVisitor` 接口，以及 `EditorError` 系列错误类（`NoSuchShapeError`、`IdExistsError` 等，只带消息，不带 `error:` 前缀）。
+  - 约束：不出现 `console`、`fs`、`readline`，也不出现 `switch(tag)`。
 - **factory**
-  - `ShapeCreator` 接口：`typeName`、`fromArgs(id, args)`（給 CLI 的 `create` 用）、`fromSvg(id, attrs)`（給讀入 SVG 用）。
-  - `ShapeFactory`：用 `Map<string, ShapeCreator>` 註冊和查找，查不到時拋出 `unknown shape type`。
-  - 第 2 處按名字分派，**待重構**；是後續 `ShapeProvider` 插件的插槽雛形。
+  - `ShapeCreator` 接口：`typeName`、`fromArgs(id, args)`（给 CLI 的 `create` 用）、`fromSvg(id, attrs)`（给读入 SVG 用）。
+  - `ShapeFactory`：用 `Map<string, ShapeCreator>` 注册和查找，查不到时抛出 `unknown shape type`。
+  - 第 2 处按名字分派，**待重构**；是后续 `ShapeProvider` 插件的插槽雏形。
 - **command**
   - `EditCommand` 接口：`execute(): string`（返回成功摘要）、`undo(): string`、`redo(): string`。
-  - 具體命令：`CreateCommand`、`DeleteCommand`、`MoveCommand`、`ScaleCommand`、`SetAttrCommand`、`GroupCommand`、`UngroupCommand`、`AddToCommand`、`ZOrderCommand`。
-  - 所有校驗在修改狀態之前完成，保證「失敗不改變狀態」；`group` 等涉及多個圖形的命令整體作為一個 undo 單元。
-  - `CommandHistory`：管理 undo/redo 兩個棧，執行新命令時清空 redo 棧，提供 `lockByIo()` 和 `unlock()`。
+  - 具体命令：`CreateCommand`、`DeleteCommand`、`MoveCommand`、`ScaleCommand`、`SetAttrCommand`、`GroupCommand`、`UngroupCommand`、`AddToCommand`、`ZOrderCommand`。
+  - 所有校验在修改状态之前完成，保证“失败不改变状态”；`group` 等涉及多个图形的命令整体作为一个 undo 单元。
+  - `CommandHistory`：管理 undo/redo 两个栈，执行新命令时清空 redo 栈，提供 `lockByIo()` 和 `unlock()`。
 - **app**
-  - `EditorSession`（Facade）：持有當前文檔、`CommandHistory` 和當前文件路徑；提供 `init/read/save/canvas` 四個文檔類操作，`execute(cmd)`、`undo()`、`redo()`，以及「無文檔」檢查。
-  - 端口接口：`DocumentReader`、`DocumentWriter`（輸入輸出為 `SvgDocument` 和路徑）、`WarningSink`（接收「自動補 id」警告）。
+  - `EditorSession`（Facade）：持有当前文档、`CommandHistory` 和当前文件路径；提供 `init/read/save/canvas` 四个文档类操作，`execute(cmd)`、`undo()`、`redo()`，以及“无文档”检查。
+  - 端口接口：`DocumentReader`、`DocumentWriter`（输入输出为 `SvgDocument` 和路径）、`WarningSink`（接收“自动补 id”警告）。
 - **io**
-  - `SvgParser`：把 XML 解析成 model，通過 `ShapeFactory.fromSvg` 構建圖形，缺 id 時補成 `標籤名+序號` 並發出警告。
-  - `SvgSerializer`：實現 `ShapeVisitor`，輸出 SVG 文本。
-  - `FileDocumentStore`：實現 app 中的端口，用 `fs` 讀寫文件，並轉換 `cannot read/write file` 錯誤。
+  - `SvgParser`：把 XML 解析成 model，通过 `ShapeFactory.fromSvg` 构建图形，缺 id 时补成 `标签名+序号` 并发出警告。
+  - `SvgSerializer`：**通用序列化器**，只依赖 `Shape` 的自描述接口（`tagName`、`attributes()`、`textContent()`、`children()`）递归输出 SVG，不认识任何具体图形类，也不使用 Visitor。
+  - `FileDocumentStore`：实现 app 中的端口，用 `fs` 读写文件，并转换 `cannot read/write file` 错误。
 - **view**
-  - `TreeRenderer`、`ShowRenderer`：實現 `ShapeVisitor`，生成實驗要求 5.1、5.2 節規定的文本。
+  - `TreeRenderer`、`ShowRenderer`：实现 `ShapeVisitor`，生成实验要求 5.1、5.2 节规定的文本。
 - **cli**
-  - `Repl`：基於 readline，處理 `svg>` 提示符和 `#` 註釋。
-  - `Tokenizer`：處理雙引號包裹的參數。
-  - `CommandRegistry`：命令名到 `CliHandler` 的映射。第 1 處按名字分派，**待重構**。
-  - 每個 `CliHandler` 負責解析參數、構建 `EditCommand`（通過 factory 創建圖形），再交給 session 執行。
-  - `ConsoleOutput`：統一加上 `error:` / `warning:` 前綴。
+  - `Repl`：基于 readline，处理 `svg>` 提示符和 `#` 注释。
+  - `Tokenizer`：处理双引号包裹的参数。
+  - `CommandRegistry`：命令名到 `CliHandler` 的映射。第 1 处按名字分派，**待重构**。
+  - 每个 `CliHandler` 负责解析参数、构建 `EditCommand`（通过 factory 创建图形），再交给 session 执行。
+  - `ConsoleOutput`：统一加上 `error:` / `warning:` 前缀。
 
-#### 包圖（PlantUML）
+#### 包图（PlantUML）
 
 ```plantuml
 @startuml
@@ -76,13 +80,15 @@ io --> model
 @enduml
 ```
 
-### 2. 設計模式的選擇
+### 2. 设计模式的选择
 
-（待補充：Command、Composite、Visitor、Facade、Factory 的具體落地說明。）
+（待补充：Command、Composite、Facade、Factory、Visitor 的具体落地说明。）
 
-### 3. 依賴方向規則
+序列化的设计决策：采用**图形自描述**而非 Visitor。每个 `Shape` 自己说明“我是什么标签、有哪些属性、有无文本内容、有哪些子节点”，`SvgSerializer` 只做通用的递归输出。这样新增图形类型（包括后续的 `box` 插件）时，序列化器无需修改，符合“内核为插件新增的代码为 0”的目标。
 
-箭頭表示「可以依賴」，圖中沒有的依賴一律禁止：
+### 3. 依赖方向规则
+
+箭头表示“可以依赖”，图中没有的依赖一律禁止：
 
 ```mermaid
 flowchart TD
@@ -103,34 +109,37 @@ flowchart TD
   view --> model
 ```
 
-1. **model 不依賴任何模塊**，也不引用 Node 內置模塊。理由：圖形樹會被 CLI、agent、鼠標三種通道共用，必須保持純淨，便於單元測試。
-2. **command 只依賴 model**。命令不關心來源是文本還是鼠標，也不做任何輸出。理由：以後 GUI 可以直接複用。
-3. **app 只依賴 model 和 command，通過自己定義的端口接口使用 IO**，不能 import io。理由：依賴倒置，文件、網絡、內存存儲都可替換，測試時可注入假實現。
-4. **io 依賴 app 的端口和 model/factory，屬於最外層的「插件」**，不允許被 app、command、model 引用。
-5. **view 只依賴 model**，以 Visitor 形式只讀遍歷圖形樹，不修改狀態。
-6. **cli 位於最外層**，可依賴 app、command、factory、view，但不能直接 import io，也不能繞過 session 直接修改 model。
-7. **只有 main.ts 可以同時看到所有模塊**，負責創建 `FileDocumentStore`、`ShapeFactory`（註冊 6 種內置類型）、`EditorSession` 和 `Repl` 並連接。
-8. **全局不允許循環依賴**；同一模塊內部可以互相引用。
-9. 按名字分派只允許出現在 `cli/CommandRegistry` 和 `factory/ShapeFactory` 兩處。
+1. **model 不依赖任何模块**，也不引用 Node 内置模块。理由：图形树会被 CLI、agent、鼠标三种通道共用，必须保持纯净，便于单元测试。
+2. **command 只依赖 model**。命令不关心来源是文本还是鼠标，也不做任何输出。理由：以后 GUI 可以直接复用。
+3. **app 只依赖 model 和 command，通过自己定义的端口接口使用 IO**，不能 import io。理由：依赖倒置，文件、网络、内存存储都可替换，测试时可注入假实现。
+4. **io 依赖 app 的端口和 model/factory，属于最外层的“插件”**，不允许被 app、command、model 引用。io 只通过 `Shape` 的自描述接口读取图形，不依赖任何具体图形子类。
+5. **view 只依赖 model**，以 Visitor 形式只读遍历图形树，不修改状态。
+6. **cli 位于最外层**，可依赖 app、command、factory、view，但不能直接 import io，也不能绕过 session 直接修改 model。
+7. **只有 main.ts 可以同时看到所有模块**，负责创建 `FileDocumentStore`、`ShapeFactory`（注册 6 种内置类型）、`EditorSession` 和 `Repl` 并连接。
+8. **全局不允许循环依赖**；同一模块内部可以互相引用。
+9. 按名字分派只允许出现在 `cli/CommandRegistry` 和 `factory/ShapeFactory` 两处。
 
-檢查手段：`dependency-cruiser`，規則見 `.dependency-cruiser.cjs`，執行 `npm run lint:deps`。
+检查手段：`dependency-cruiser`，规则见 `.dependency-cruiser.cjs`，执行 `npm run lint:deps`。
 
-### 4. 變化點假設
+### 4. 变化点假设
 
-- **序列化：Visitor 還是圖形自描述**。Visitor 讓 model 不涉及 SVG 格式，但新增類型時要修改 Visitor，與 `box` 插件化目標衝突。另一種做法是 `Shape` 暴露 `tagName` 和 `attributes()`，由序列化器通用處理。目前先選 Visitor，記為插件化階段的重構點。
-- **命令直接返回摘要字符串**：簡單，但一部分展示職責落在了 command。若以後要多語言或有 GUI，可改成結構化的 `CommandResult`。
-- **暫不引入 Observer**：CLI 不需要；GUI 階段需要刷新畫面時，再在 `SvgDocument` 上加事件。
+- **新增图形类型（如 `box` 插件）**：序列化已改为图形自描述，序列化器无需修改；`box` 的 `data-kind` 标记只需由其 `attributes()` 输出。代价是 model 中的 `Shape` 需要知道 SVG 的标签名和属性名，即 SVG 词汇进入了 model。决定接受这一点：SVG 本身就是本领域的原生格式，不为“可能换成别的格式”预留抽象。
+- **tree/show 对新类型的显示**：view 仍使用 Visitor，新增图形类型时需要同步修改渲染器，这与插件化目标存在冲突，记为插件化阶段的重构点（可能改为由图形提供 `describe()` 一类的自描述接口）。
+- **命令直接返回摘要字符串**：简单，但一部分展示职责落在了 command。若以后要多语言或有 GUI，可改成结构化的 `CommandResult`。
+- **暂不引入 Observer**：CLI 不需要；GUI 阶段需要刷新画面时，再在 `SvgDocument` 上加事件。
 
-（待補充：其餘變化點。）
+（待补充：其余变化点。）
 
-## 過程記錄
+## 过程记录
 
-（待補充。）
+- **序列化方案由 Visitor 改为图形自描述**：AI 给出的初稿选用 Visitor，同时在取舍中指出它与 `box` 插件化（内核新增代码为 0）的目标冲突。复核后决定在方案阶段就改为自描述，避免后期重构；view 暂时保留 Visitor，作为已知的待重构点记入变化点假设。
+
+（其余待补充。）
 
 ## 一致性自查
 
-（實現完成後補充。）
+（实现完成后补充。）
 
-## 質量保證手段
+## 质量保证手段
 
-（實現完成後補充。）
+（实现完成后补充。）
