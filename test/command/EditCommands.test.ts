@@ -49,6 +49,18 @@ describe('CreateCommand', () => {
     expect(doc.shapeCount).toBe(1);
     expect(doc.root.children()).toHaveLength(1);
   });
+
+  it('目标不是容器时不登记新图形', () => {
+    const doc = new SvgDocument();
+    const parent = rect('parent');
+    doc.insert(parent, doc.root);
+
+    expect(() => new CreateCommand(doc, rect('child'), parent).execute()).toThrow(
+      'not a container: parent',
+    );
+    expect(doc.has('child')).toBe(false);
+    expect(doc.shapeCount).toBe(1);
+  });
 });
 
 describe('DeleteCommand', () => {
@@ -122,7 +134,7 @@ describe('ScaleCommand', () => {
     expect(command.redo()).toBe('text#t1 scaled by 0.333333');
   });
 
-  it.each([0, -1])('因子 %s 非正数时不改变状态', (factor) => {
+  it.each([0, -1, Number.POSITIVE_INFINITY])('因子 %s 非法时不改变状态', (factor) => {
     const doc = new SvgDocument();
     const shape = rect('r1', 2, 3);
     doc.insert(shape, doc.root);
