@@ -5,16 +5,18 @@
  *   io      -> app(端口), factory, model
  *   app     -> command, model
  *   command -> model
+ *   shapes  -> factory, model（内置图形，只有 main 可以引用）
  *   factory -> model
  *   view    -> model
  *   model   -> (无)
  *   main    -> 全部（Composition Root）
  * 图中没有的依赖一律禁止（同一模块内部除外）。
+ * model 内部：error <- shape <- document（箭头指向被依赖方）。
  */
 
 /** 用模块名构造 src/<module>/ 路径的正则 */
 const mod = (...names) => `^src/(${names.join('|')})/`;
-const all = ['model', 'factory', 'command', 'app', 'io', 'view', 'cli'];
+const all = ['model', 'factory', 'shapes', 'command', 'app', 'io', 'view', 'cli'];
 /** 除 allowed 与自身外的所有模块，用于“只允许依赖白名单”的规则 */
 const except = (self, ...allowed) =>
   mod(...all.filter((m) => m !== self && !allowed.includes(m)));
@@ -41,6 +43,34 @@ module.exports = {
       severity: 'error',
       from: { path: mod('model') },
       to: { dependencyTypes: ['core'] },
+    },
+    {
+      name: 'model-error-is-leaf',
+      comment: 'model 内部：error 不依赖 model 的其他子模块',
+      severity: 'error',
+      from: { path: '^src/model/error/' },
+      to: { path: '^src/model/(shape|document)/' },
+    },
+    {
+      name: 'model-shape-no-document',
+      comment: 'model 内部：shape 不依赖 document（文档持有图形树，反之不行）',
+      severity: 'error',
+      from: { path: '^src/model/shape/' },
+      to: { path: '^src/model/document/' },
+    },
+    {
+      name: 'shapes-allowed-deps',
+      comment: '内置图形只依赖 factory 与 model',
+      severity: 'error',
+      from: { path: mod('shapes') },
+      to: { path: except('shapes', 'factory', 'model') },
+    },
+    {
+      name: 'shapes-isolated-from-each-other',
+      comment: '每种内置图形是独立子模块，彼此不得互相引用',
+      severity: 'error',
+      from: { path: '^src/shapes/([^/]+)/' },
+      to: { path: '^src/shapes/([^/]+)/', pathNot: '^src/shapes/$1/' },
     },
     {
       name: 'command-only-model',
@@ -83,6 +113,13 @@ module.exports = {
       severity: 'error',
       from: { path: mod('cli') },
       to: { path: except('cli', 'app', 'command', 'factory', 'view') },
+    },
+    {
+      name: 'only-main-uses-shapes',
+      comment: '规则 7：具体图形类型只在 Composition Root 中注册，内核不认识它们',
+      severity: 'error',
+      from: { path: '^src/', pathNot: ['^src/main\\.ts$', '^src/shapes/'] },
+      to: { path: mod('shapes') },
     },
     {
       name: 'only-main-is-root',

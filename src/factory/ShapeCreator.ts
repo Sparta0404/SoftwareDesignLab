@@ -1,4 +1,4 @@
-import type { Shape } from '../model/Shape';
+import type { Shape } from '../model/shape/Shape';
 
 /**
  * 某一种图形类型的创建器：负责从 CLI 参数或 SVG 属性构造图形。

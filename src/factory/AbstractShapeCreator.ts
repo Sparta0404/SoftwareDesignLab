@@ -1,6 +1,6 @@
-import { InvalidArgumentsError } from '../model/error/InvalidArgumentsError';
-import { Numbers } from '../model/Numbers';
-import { Shape } from '../model/Shape';
+import { Numbers } from '../model/shape/Numbers';
+import { Shape } from '../model/shape/Shape';
+import { InvalidArgumentsError } from './error/InvalidArgumentsError';
 import type { ShapeCreator } from './ShapeCreator';
 
 /**

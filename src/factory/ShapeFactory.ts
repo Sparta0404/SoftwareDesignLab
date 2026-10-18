@@ -1,32 +1,15 @@
-import { UnknownShapeTypeError } from '../model/error/UnknownShapeTypeError';
-import type { Shape } from '../model/Shape';
-import { CircleCreator } from './CircleCreator';
-import { EllipseCreator } from './EllipseCreator';
-import { GroupCreator } from './GroupCreator';
-import { LineCreator } from './LineCreator';
-import { RectCreator } from './RectCreator';
+import type { Shape } from '../model/shape/Shape';
+import { UnknownShapeTypeError } from './error/UnknownShapeTypeError';
 import type { ShapeCreator } from './ShapeCreator';
-import { TextCreator } from './TextCreator';
 
 /**
- * 图形工厂：类型名 -> 创建器。
+ * 图形工厂：类型名 -> 创建器的注册表，本身不认识任何具体图形类型。
  *
  * 【待重构】这里是按名字分派的两处之一（另一处是 CLI 的 CommandRegistry）。
  * 它同时是后续 ShapeProvider 插件的注册插槽：新类型只需 register 一个创建器。
  */
 export class ShapeFactory {
   private readonly creators = new Map<string, ShapeCreator>();
-
-  /** 内置 rect / circle / ellipse / line / text / g 六种类型。 */
-  static withBuiltins(): ShapeFactory {
-    return new ShapeFactory()
-      .register(new RectCreator())
-      .register(new CircleCreator())
-      .register(new EllipseCreator())
-      .register(new LineCreator())
-      .register(new TextCreator())
-      .register(new GroupCreator());
-  }
 
   register(creator: ShapeCreator): this {
     if (this.creators.has(creator.typeName)) {
