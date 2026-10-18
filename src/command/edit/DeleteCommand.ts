@@ -22,7 +22,7 @@ export class DeleteCommand implements EditCommand {
     const shape = this.requiredShape();
     const placement = this.requiredPlacement();
     this.document.insert(shape, placement.parent, placement.index);
-    return `${shape.label} restored`;
+    return `${shape.label} restored into ${this.document.parentLabel(shape)}`;
   }
 
   redo(): string {

@@ -79,7 +79,7 @@ describe('DeleteCommand', () => {
     expect(command.execute()).toBe('g#g1 deleted');
     expect(doc.root.children().map((item) => item.id)).toEqual(['before', 'after']);
     expect(doc.has('child')).toBe(false);
-    expect(command.undo()).toBe('g#g1 restored');
+    expect(command.undo()).toBe('g#g1 restored into svg');
     expect(doc.root.children().map((item) => item.id)).toEqual(['before', 'g1', 'after']);
     expect(doc.find('child')).toBe(child);
     expect(command.redo()).toBe('g#g1 deleted');

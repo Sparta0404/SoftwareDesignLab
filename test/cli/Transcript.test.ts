@@ -181,12 +181,12 @@ describe('实验要求中的 CLI 会话', () => {
         'svg (800x600)',
         '└── g#flowchart',
         '    ├── g#node1',
-        '    │   ├── rect#start       x=120 y=100 w=160 h=60 fill=#4a90d9',
-        '    │   └── text#start-label (155,135) "开始"',
+        '    │   ├── rect#start          x=120 y=100 w=160 h=60 fill=#4a90d9',
+        '    │   └── text#start-label    (155,135) "开始"',
         '    ├── g#node2',
-        '    │   ├── rect#process     x=520 y=100 w=160 h=60 fill=#f5a623',
-        '    │   └── text#process-label (545,135) "处理数据 v2"',
-        '    └── line#arrow1          (280,130) -> (520,130)',
+        '    │   ├── rect#process        x=520 y=100 w=160 h=60 fill=#f5a623',
+        '    │   └── text#process-label  (545,135) "处理数据 v2"',
+        '    └── line#arrow1             (280,130) -> (520,130)',
       ].join('\n'),
     );
   });
