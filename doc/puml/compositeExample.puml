@@ -1,0 +1,54 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 100
+skinparam ranksep 80
+skinparam groupInheritance 2
+
+class MoveCommand {
+  execute()
+  ..
+  不区分叶子和容器
+  ..
+  shape.move(dx, dy)
+}
+
+abstract class Shape {
+  move(dx, dy)
+  children()
+  insertChild(child)
+  removeChild(child)
+  --
+  叶子与容器同一接口
+}
+
+class GroupShape {
+  items : Shape[]
+  --
+  move(dx, dy)
+  children()
+  insertChild(child)
+  ..
+  递归转发
+  ..
+  child.move(dx, dy)
+}
+
+abstract class GeometryShape {
+  move(dx, dy)
+  ..
+  修改自身的 x、y
+}
+
+class RectShape {
+  tagName = "rect"
+  ..
+  不改写 move
+}
+
+MoveCommand -down-> Shape : shape.move()
+Shape <|-- GroupShape
+Shape <|-- GeometryShape
+GeometryShape <|-- RectShape
+GroupShape o--> Shape : children
+@enduml

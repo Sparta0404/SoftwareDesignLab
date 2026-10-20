@@ -60,7 +60,7 @@ src/
   - `history/EditCommand` 接口：`execute(): string`（返回成功摘要）、`undo(): string`、`redo(): string`。
   - `edit/` 中的具体命令：`CreateCommand`、`DeleteCommand`、`MoveCommand`、`ScaleCommand`、`SetAttrCommand`、`GroupCommand`、`UngroupCommand`、`AddToCommand`、`ZOrderCommand`。
   - 所有校验在修改状态之前完成，保证“失败不改变状态”；`group` 等涉及多个图形的命令整体作为一个 undo 单元。
-  - `history/CommandHistory`：管理 undo/redo 两个栈，执行新命令时清空 redo 栈，提供 `lockByIo()` 和 `unlock()`。
+  - `history/CommandHistory`：管理 undo/redo 两个栈，执行新命令时清空 redo 栈。`lockByIo()` 清空两个栈并禁止撤销，下一次成功的 `execute` 自动解除锁定。
 - **app**
   - `EditorSession`（Facade）：持有当前文档、`CommandHistory` 和当前文件路径；提供 `init/read/save/canvas` 四个文档类操作，`execute(cmd)`、`undo()`、`redo()`，以及“无文档”检查。
   - 端口接口：`DocumentReader`、`DocumentWriter`（输入输出为 `SvgDocument` 和路径）、`WarningSink`（接收“自动补 id”警告）。
@@ -79,67 +79,70 @@ src/
   - `handler/` 中每个 `CliHandler` 负责解析参数、构建 `EditCommand`（通过 factory 创建图形），再交给 session 执行。
   - `ConsoleOutput`：统一加上 `error:` / `warning:` 前缀。
 
-
-
 #### 包图（PlantUML）
 
-```plantuml
-@startuml
-package cli {
-  package handler
-}
-package app
-package command {
-  package edit
-  package history
-}
-package model {
-  package error
-  package shape
-  package document
-}
-package factory
-package shapes {
-  package rect
-  package circle
-  package ellipse
-  package line
-  package text
-  package group
-}
-package io
-package view
-component main
-
-main --> cli
-main --> io
-main --> shapes
-cli --> app
-cli --> command
-cli --> factory
-cli --> view
-app --> command
-app --> model
-command --> model
-shapes --> factory
-shapes --> model
-factory --> model
-view --> model
-io ..|> app : implements ports
-io --> factory
-io --> model
-document --> shape
-shape --> error
-@enduml
-```
-
-
+![](puml\png\packages.png)
 
 ### 2. 设计模式的选择
 
-（待补充：Command、Composite、Facade、Factory 的具体落地说明。）
+课程要求使用 Command。实现中还用了 Composite、Factory、模板方法和 Facade；文件读写通过 app 自己定义的端口做依赖倒置。序列化和 `tree` / `show` 不使用 Visitor，为图形自描述。
 
-序列化与显示的设计决策：采用**图形自描述**而非 Visitor。每个 `Shape` 自己说明“我是什么标签、有哪些属性、有无文本内容、有哪些子节点、在 tree/show 中如何显示”，`SvgSerializer`、`TreeRenderer`、`ShowRenderer` 只做通用的递归遍历与排版。这样新增图形类型（包括后续的 `box` 插件）时，序列化器和渲染器都无需修改，符合“内核为插件新增的代码为 0”的目标。本方案不使用 Visitor。
+
+| 模式        | 角色在代码中的位置                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------- |
+| Command   | `EditCommand` 是命令；`command/edit/` 下 9 个类是具体命令；`SvgDocument` 和 `Shape` 是接收者；`CommandHistory` 是调用者；`cli/handler/` 是客户端 |
+| Composite | `Shape` 是组件，`GroupShape` 是容器，`RectShape` 等叶子经 `GeometryShape` 实现同一套操作                                                |
+| Factory   | `ShapeCreator` 是每种类型的工厂，`ShapeFactory` 是按类型名查找的注册表                                                                   |
+| 模板方法      | `AbstractShapeCreator` 固定“解析参数再构建”的骨架；`GeometryShape` 固定几何属性的移动、缩放和读写                                                |
+| Facade    | `EditorSession` 把当前文档、历史、文件路径和“有没有文档”收成一个入口                                                                          |
+| 依赖倒置      | `DocumentReader`、`DocumentWriter`、`WarningSink` 由 app 定义，`FileDocumentStore` 和 `ConsoleOutput` 在外层实现                 |
+
+
+#### Command
+
+下面以 `move` 为例。其余 8 个具体命令的结构相同，只是转发给接收者的方法不同。
+
+![](puml\png\commandExample.png)
+
+一条编辑命令是一个 undo 单元。`EditCommand` 只有 `execute`、`undo`、`redo`，返回成功摘要，不写控制台。`MoveCommand`、`DeleteCommand`、`GroupCommand` 等各自保存撤销所需的快照：移动和缩放保存几何值，删除和编组保存原来的父节点与下标。`group` 即使收编多个图形，也只生成一个 `GroupCommand`，撤销一次就全部还原。
+
+`CommandHistory` 不认识任何具体命令。它先调用 `execute`，成功后才压入 undo 栈并清空 redo 栈；执行中抛出的错误不会入栈，因此失败命令不改变历史。`init`、`read`、成功的 `save` 和修改尺寸的 `canvas` 调用 `lockByIo()`，清空两个栈并禁止跨越这次文档操作撤销。下一条成功的编辑命令会自动解除锁定，并成为新的历史起点。
+
+CLI 处理器只解析参数并构造命令。例如 `MoveHandler` 把文本变成数字后，通过 `EditorSession.execute` 得到当前文档，再创建 `MoveCommand`。会话负责检查“是否已有文档”，历史负责入栈，命令负责修改图形。以后 GUI 可以复用同一批命令，不必经过文本解析。
+
+#### Composite
+
+下面以 `move` 为例。`circle`、`ellipse`、`line`、`text` 与 `RectShape` 相同，都经 `GeometryShape` 实现 `move`。
+
+![](puml\png\compositeExample.png)
+
+`Shape` 同时声明叶子和容器都会用到的操作：`move`、`scale`、`setAttr`，以及 `children()`、`insertChild`、`removeChild`。这是透明式 Composite。叶子的 `children()` 返回空列表，对叶子调用插入或摘除会抛出 `not a container`。因此 `DeleteCommand`、`TreeRenderer` 和 `SvgSerializer` 都可以只依赖 `Shape`，不必判断对象是矩形还是分组。
+
+`GroupShape.move` 和 `scale` 递归到每个子节点，所以 `move node2 0 100` 会带动组内的矩形和文字。文档根节点也是一个 `GroupShape`，但它表示 `<svg>` 本身，不进入 id 索引，也不能被 `ungroup`。`isComposite()` 预留给 `box` 这类内部结构归插件所有的容器；当前内置的 `g` 返回 `false`，`UngroupCommand` 遇到 `true` 时拒绝解散。
+
+#### Factory 与模板方法
+
+下面以 `create rect` 为例。`circle`、`ellipse`、`line`、`g` 与 `RectCreator` 相同，只实现 `build`。
+
+![](puml\png\factoryExample.png)
+
+创建图形有两个入口，但都落到同一个 `ShapeCreator`：`fromArgs` 服务 CLI 的 `create`，`fromSvg` 服务读入 SVG。`ShapeFactory` 用 `Map<string, ShapeCreator>` 按类型名查找，找不到就抛出 `unknown shape type`。工厂本身不引用 `RectShape` 等具体类。六种内置类型由 `BuiltinShapes` 注册，而 `BuiltinShapes` 只允许 `main.ts` 引用。
+
+`AbstractShapeCreator` 把重复流程固定下来：检查参数个数、把几何参数解析成数字、调用子类的 `build`，再按类型写入可选的 `fill` 或 `stroke`。`RectCreator`、`CircleCreator` 等只声明属性名并实现 `build`。`text` 的第三个参数是字符串内容，不符合这个数值模板，所以 `TextCreator` 覆盖了 `fromArgs`，读入 SVG 时仍复用基类的 `fromSvg`。
+
+`GeometryShape` 是另一处模板方法。它按 SVG 属性名保存数值，统一实现移动、缩放、属性读写和序列化；具体叶子只声明哪些键属于 x 或 y。这样新增一种普通几何图形时，不需要再写一遍 `move` 和 `setAttr`。
+
+`ShapeFactory` 和 CLI 的 `CommandRegistry` 是全项目仅有的两处按名字分派，代码里都标注为待重构。它们现在是可替换实现的注册表，还不是能够动态加载的插件框架。
+
+#### Facade 与依赖倒置
+
+下面以 `read` 为例。`init`、`save`、`canvas`、`execute`、`undo`、`redo` 也同样只从 `EditorSession` 进入。
+
+![](puml\png\facadeExample.png)
+
+`EditorSession` 是外层访问编辑器的唯一入口。它隐藏了三件易变的事：当前文档可能不存在、撤销栈何时被文档操作锁住、文件路径是显式传入还是沿用上次的路径。`init`、`read`、`save`、`canvas`、`execute`、`undo`、`redo` 都从这里进入。`tree` 和 `show` 不修改状态，通过 `inspect` 只读访问文档。
+
+会话不直接依赖文件系统。它依赖自己声明的 `DocumentReader`、`DocumentWriter` 和 `WarningSink`。`FileDocumentStore` 用 `fs` 实现前两个端口，并把系统错误转换成 `cannot read file` 或 `cannot write file`；XML 内容错误则原样抛出，不伪装成文件错误。`ConsoleOutput` 同时实现 CLI 的 `TextOutput` 和 `WarningSink`，统一添加 `error:` 与 `warning:` 前缀。测试可以用内存桩替换这些实现，app 和 command 都不用改。
 
 ### 3. 依赖方向规则
 
@@ -183,24 +186,40 @@ flowchart TD
 
 ### 4. 变化点假设
 
-- **新增图形类型（如 `box` 插件）**：新增 `shapes/box/` 子模块并在 `main.ts` 注册即可。序列化与 tree/show 显示都已改为图形自描述，序列化器和渲染器无需修改；`box` 的 `data-kind` 标记由其 `attributes()` 输出，`g#n1 (box)` 的类型标注由其 `summary()` 输出。代价是 model 中的 `Shape` 需要知道 SVG 的标签名和属性名，并且承担了一部分显示文本的职责，即 SVG 词汇和显示格式进入了 model。决定接受这一点：SVG 本身就是本领域的原生格式，不为“可能换成别的格式”预留抽象。
+- **新增图形类型（如** `box` **插件）**：新增 `shapes/box/` 子模块并在 `main.ts` 注册即可。序列化与 tree/show 显示都已改为图形自描述，序列化器和渲染器无需修改；`box` 的 `data-kind` 标记由其 `attributes()` 输出，`g#n1 (box)` 的类型标注由其 `summary()` 输出。代价是 model 中的 `Shape` 需要知道 SVG 的标签名和属性名，并且承担了一部分显示文本的职责，即 SVG 词汇和显示格式进入了 model。决定接受这一点：SVG 本身就是本领域的原生格式，不为“可能换成别的格式”预留抽象。
 - **显示文本的职责边界**：`summary()`/`detailLines()` 返回的是 CLI 文本。若以后有 GUI 需要结构化属性展示，可改为返回键值对，由各通道自行排版；目前 CLI 是唯一通道，暂不预留。
 - **命令直接返回摘要字符串**：简单，但一部分展示职责落在了 command。若以后要多语言或有 GUI，可改成结构化的 `CommandResult`。
 - **暂不引入 Observer**：CLI 不需要；GUI 阶段需要刷新画面时，再在 `SvgDocument` 上加事件。
-
-（待补充：其余变化点。）
+- **新增 CLI 命令**：加一个 `command/edit` 中的命令类和一个 `cli/handler`，再在 `Cli.createDefault` 里 `register` 一行。命令只改 model，处理器只解析参数并交给 `EditorSession`。`CommandRegistry` 与 `ShapeFactory` 一样仍是按名字分派，代码中标注为待重构。
+- **另一种输入通道（GUI、agent）**：`EditCommand` 不解析文本、也不写控制台，`EditorSession` 是访问当前文档和历史的唯一入口，因此新通道可以复用同一批命令。鼠标点选和命中检测当前不存在，没有为它们预留接口。
+- **存储介质**：`DocumentReader`、`DocumentWriter` 由 app 定义，`FileDocumentStore` 只是用 `fs` 做的一种实现。换成内存或网络存储时，替换注入给 `EditorSession` 的实现即可，app 和 command 不用改。
 
 ## 过程记录
 
 - **序列化方案由 Visitor 改为图形自描述**：AI 给出的初稿选用 Visitor，同时在取舍中指出它与 `box` 插件化（内核新增代码为 0）的目标冲突。复核后决定在方案阶段就改为自描述，避免后期重构。起初 view 仍保留 Visitor（每种图形的显示格式不同），但这会让新增类型时仍需修改渲染器，与序列化改动的目的自相矛盾，随后也一并改为自描述（`summary()` / `detailLines()`），整个方案不再使用 Visitor。
-- **从“只按层分”到“层 + 子模块 + 纵向的 shapes 模块”**：实现完 model 和 factory 两层后发现，`model/` 一层堆了 28 个文件（图形内核、文档、17 个错误类混在一起），且同一种图形被拆在两层（`RectShape` 在 model、`RectCreator` 在 factory），新增类型要同时改两层，与插件化目标不符。于是重构为：层内按内聚分子模块；具体图形与其创建器合并为 `shapes/<type>/`，并新增“只有 main.ts 可以引用 shapes”的规则；错误类就近放到抛出它的层。之所以能加上这条规则，是因为此前已把序列化和显示改为图形自描述，io / view / command 本来就不需要认识具体图形类。重构后用临时违规文件验证了新规则全部生效。
-
-（其余待补充。）
+- **从“只按层分”到“层 + 子模块 + 纵向的 shapes 模块”**：让 AI 实现完 model 和 factory 两层后发现，`model/` 一层堆了 28 个文件（图形内核、文档、17 个错误类混在一起），且同一种图形被拆在两层（`RectShape` 在 model、`RectCreator` 在 factory），新增类型要同时改两层，与插件化目标不符。于是重构为：层内按内聚分子模块；具体图形与其创建器合并为 `shapes/<type>/`，并新增“只有 main.ts 可以引用 shapes”的规则；错误类就近放到抛出它的层。之所以能加上这条规则，是因为此前已把序列化和显示改为图形自描述，io / view / command 本来就不需要认识具体图形类。重构后用临时违规文件验证了新规则全部生效。
 
 ## 一致性自查
 
-（实现完成后补充。）
+- **模块划分**：`src/` 的目录与第 1 节一致。`model` 内是 `error`、`shape`、`document`；`shapes/` 下每种图形一个子目录，图形类与创建器放在一起；`GroupShape` 留在 `model/shape`，因为文档根就是一个组。`command` 分为 `edit`、`history`、`error`，`app` 只保留会话和端口，`cli/handler` 一条命令一个类。
+- **依赖方向**：`npm run lint:deps` 通过。`.dependency-cruiser.cjs` 与第 3 节的规则对应，包括 model 不引用其他模块和 Node 内置模块、command 只依赖 model、app 不引用 io、cli 不引用 io 和 model、只有 `main.ts` 引用 `shapes/`、各图形子模块互不引用、没有循环依赖。
+- **设计模式**：第 2 节列出的角色都在代码里。`command/edit/` 有 9 个具体命令，都实现 `EditCommand`；`CommandHistory` 只依赖这个接口。`Shape` 上声明了容器操作，叶子调用时抛出 `not a container`。`ShapeFactory` 不引用 `RectShape` 等具体类，六种内置类型由 `BuiltinShapes` 注册。`EditorSession` 是唯一入口，`FileDocumentStore` 实现 `DocumentReader` 和 `DocumentWriter`。序列化和 `tree` / `show` 只调用 `Shape` 的自描述方法，没有 Visitor。按名字分派只有 `CommandRegistry.dispatch` 和 `ShapeFactory` 的查找两处。
+- **类图省略了会话**：Command 类图把 `MoveHandler` 直接画到 `CommandHistory`，用来标出客户端、调用者和命令。代码里处理器只调用 `EditorSession.execute`，再由会话进入历史栈。这条路径写在 Command 一节的正文和 Facade 图里。依赖方向以包图和 dependency-cruiser 为准，类图只表示一次调用里的模式角色。
+- **一处文档与实现不符 (后面已改正)**：第 1 节写 `CommandHistory` 提供 `unlock()`。实现中没有这个方法。`lockByIo()` 清空两个栈，下一次成功的编辑命令在 `execute` 里解除锁定，并成为新的历史起点。
 
 ## 质量保证手段
 
-（实现完成后补充。）
+三条命令覆盖测试、类型和依赖方向：`npm test`（vitest）、`npm run build`（`tsc`，`strict: true`）、`npm run lint:deps`（dependency-cruiser）。
+
+- **TDD**：每一层先写测试并单独提交，确认失败后再写实现。因此提交历史上都是 `test(...)` 与 `feat(...)` 成对出现。测试目录与 `src/` 的层一一对应。
+- **每层锁住的行为**：
+  - model：图形树、id 唯一性、叶子不是容器、`move` / `scale` 的作用范围。
+  - factory 与 shapes：注册表查不到类型时抛错；`fromArgs` 与 `fromSvg` 两条创建路径。
+  - command：每条编辑命令的执行、撤销和重做；非法输入不改变文档；历史栈在文档操作之后锁定，失败的命令不入栈。
+  - app：会话的 `init` / `read` / `save` / `execute`。`DocumentReader`、`DocumentWriter`、`WarningSink` 用桩替换，会话测试不碰文件系统。
+  - io：SVG 解析与序列化，以及临时目录中的文件读写。
+  - view：`tree` 的连接符与列对齐，`show` 的明细行。
+  - cli：分词、`error:` / `warning:` 前缀、REPL 和命令分派。
+- **实验会话回放**：`test/cli/Transcript.test.ts` 通过 `createCli` 回放两段会话，一段是完整的编辑、撤销和文件往返，一段是用组合作节点的流程图。断言的是 stdout 和 stderr 的全文。临时文件放在系统临时目录，不修改进程的工作目录。真实地在程序上运行实验会话回放，也得到了和要求文档中相同的结果。
+- **依赖方向由工具检查**：`.dependency-cruiser.cjs` 把第 3 节的规则写成禁止项，包括禁止循环依赖、model 不引用 Node 内置模块、只有 `main.ts` 可以引用 `shapes/`。规则写好后用临时违规文件确认能被拦住，再删掉这些文件。
+

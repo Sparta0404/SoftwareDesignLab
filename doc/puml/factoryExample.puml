@@ -1,0 +1,57 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 100
+skinparam ranksep 70
+
+class CreateHandler {
+  name = "create"
+  --
+  execute(args)
+  ..
+  只按类型名创建
+  ..
+  factory.create(type, id, params)
+}
+
+class ShapeFactory {
+  creators : Map
+  --
+  create(type, id, args)
+  ..
+  不认识具体图形
+  ..
+  creator.fromArgs(id, args)
+}
+
+interface ShapeCreator {
+  fromArgs(id, args)
+  fromSvg(id, attrs, text)
+}
+
+abstract class AbstractShapeCreator {
+  fromArgs(id, args)
+  {abstract} build(id, numbers, text)
+  ..
+  解析参数后调用 build
+}
+
+class RectCreator {
+  typeName = "rect"
+  geometryKeys = x, y, width, height
+  --
+  build(id, numbers)
+  ..
+  new RectShape(...)
+}
+
+class RectShape {
+  tagName = "rect"
+}
+
+CreateHandler -down-> ShapeFactory : factory.create()
+ShapeFactory -down-> ShapeCreator : creator.fromArgs()
+ShapeCreator <|-down- AbstractShapeCreator
+AbstractShapeCreator <|-down- RectCreator
+RectCreator -down-> RectShape : new RectShape()
+@enduml

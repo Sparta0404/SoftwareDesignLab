@@ -1,0 +1,48 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 90
+skinparam ranksep 80
+
+class MoveHandler {
+  name = "move"
+  --
+  execute(args)
+}
+
+interface EditCommand {
+  execute()
+  undo()
+  redo()
+}
+
+class CommandHistory {
+  execute(command)
+  undo()
+  redo()
+}
+
+class MoveCommand {
+  document : SvgDocument
+  --
+  execute()
+  ..
+  只转发
+  ..
+  shape.move(dx, dy)
+}
+
+class Shape {
+  move(dx, dy)
+  --
+  修改自身几何属性
+  ..
+  容器再递归到子孙
+}
+
+MoveHandler --> MoveCommand : 构造
+MoveHandler ..> CommandHistory : 委托执行
+CommandHistory --> EditCommand : 持有
+EditCommand <|.. MoveCommand
+MoveCommand --> Shape : shape.move()
+@enduml

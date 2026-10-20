@@ -1,0 +1,47 @@
+@startuml
+package cli {
+  package handler
+}
+package app
+package command {
+  package edit
+  package history
+}
+package model {
+  package error
+  package shape
+  package document
+}
+package factory
+package shapes {
+  package rect
+  package circle
+  package ellipse
+  package line
+  package text
+  package group
+}
+package io
+package view
+component main
+
+main --> cli
+main --> io
+main --> shapes
+cli --> app
+cli --> command
+cli --> factory
+cli --> view
+app --> command
+app --> model
+command --> model
+shapes --> factory
+shapes --> model
+factory --> model
+view --> model
+io ..|> app : implements ports
+io --> factory
+io --> model
+document --> shape
+shape --> error
+@enduml

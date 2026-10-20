@@ -1,0 +1,55 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 90
+skinparam ranksep 70
+
+class ReadHandler {
+  name = "read"
+  --
+  execute(args)
+  ..
+  只调用会话
+  ..
+  session.read(path)
+}
+
+class EditorSession {
+  document : SvgDocument
+  history : CommandHistory
+  --
+  read(path)
+  execute(factory)
+  undo()
+  redo()
+  ..
+  读成功后才替换文档
+  ..
+  reader.read(path)
+  history.lockByIo()
+}
+
+interface DocumentReader {
+  read(path, warnings)
+}
+
+class CommandHistory {
+  execute(command)
+  undo()
+  redo()
+  lockByIo()
+}
+
+class FileDocumentStore {
+  read(path, warnings)
+  write(path, document)
+  ..
+  真正使用 fs
+}
+
+ReadHandler -down-> EditorSession : session.read()
+EditorSession -down-> DocumentReader : reader.read()
+EditorSession -down-> CommandHistory : history.lockByIo()
+DocumentReader <|-down- FileDocumentStore
+DocumentReader -[hidden]right- CommandHistory
+@enduml
