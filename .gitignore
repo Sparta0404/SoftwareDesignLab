@@ -2,3 +2,8 @@ node_modules/
 dist/
 requirement_docs/
 svg_outputs/
+vscode-extension/node_modules/
+vscode-extension/out/
+vscode-extension/out-test/
+vscode-extension/.vscode-test/
+*.vsix
