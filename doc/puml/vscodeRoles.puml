@@ -1,0 +1,57 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 50
+skinparam ranksep 60
+
+interface FileDecorationProvider {
+  provideFileDecoration(uri)
+}
+
+class SvgFileDecorationProvider {
+  provideFileDecoration(uri)
+}
+
+interface DocumentSymbolProvider {
+  provideDocumentSymbols(document)
+}
+
+class SvgDocumentSymbolProvider {
+  provideDocumentSymbols(document)
+}
+
+class SvgOutlineParser {
+  parse(text) : OutlineNode[]
+}
+
+class OutlineNode {
+  label
+  range
+  selectionRange
+  children
+}
+
+class DocumentSymbol {
+  name
+  range
+  selectionRange
+  children
+}
+
+FileDecorationProvider <|.. SvgFileDecorationProvider
+DocumentSymbolProvider <|.. SvgDocumentSymbolProvider
+SvgDocumentSymbolProvider --> SvgOutlineParser
+SvgOutlineParser --> OutlineNode
+SvgDocumentSymbolProvider ..> DocumentSymbol : 转换成宿主要求的类型
+
+note right of SvgFileDecorationProvider
+  不持有资源节点。
+  宿主按需回调，并合并多个 provider 的结果。
+end note
+
+note bottom of SvgDocumentSymbolProvider
+  Target = DocumentSymbolProvider
+  Adaptee = SvgOutlineParser / OutlineNode
+  Client = VS Code
+end note
+@enduml

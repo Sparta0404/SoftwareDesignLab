@@ -1,4 +1,4 @@
-# Lab1 Phase 1：SVG 编辑器（CLI）
+# Lab1 Phase 2：插件实践与插件式重构
 
 ## 架构方案
 
@@ -223,17 +223,119 @@ flowchart TD
 - **实验会话回放**：`test/cli/Transcript.test.ts` 通过 `createCli` 回放两段会话，一段是完整的编辑、撤销和文件往返，一段是用组合作节点的流程图。断言的是 stdout 和 stderr 的全文。临时文件放在系统临时目录，不修改进程的工作目录。真实地在程序上运行实验会话回放，也得到了和要求文档中相同的结果。
 - **依赖方向由工具检查**：`.dependency-cruiser.cjs` 把第 3 节的规则写成禁止项，包括禁止循环依赖、model 不引用 Node 内置模块、只有 `main.ts` 可以引用 `shapes/`。规则写好后用临时违规文件确认能被拦住，再删掉这些文件。
 
+
+
+# Lab2 新增內容
+
 ## 第一部分：VSCode 插件实践
+
+扩展放在 `vscode-extension/`，自带 `package.json`、依赖和编译产物，不改 Phase 1 的 `src/`。
+
+它做两件事：在资源管理器里给 `.svg` 文件加上 `[]` 标记，并在大纲里按元素嵌套列出符号。
+
+### 构建与启动
+
+在 `vscode-extension` 目录执行：
+
+```text
+npm install
+npm run compile
+```
+
+用 VS Code 打开 `vscode-extension` 目录，按 F5。调试配置 `Run Extension` 会先启动默认构建任务（`npm run watch`），再打开标题带「扩展开发宿主」的窗口。
+
+> 若出现 正在等待 preLaunchTask"watch"... ，点"仍然调试"
+
+`package.json` 的 `activationEvents` 是 `onStartupFinished`。宿主启动结束后调用 `activate`，在那里注册文件标记和文档符号两个 provider。
+
+---
+
+也可以打包后装进普通窗口：
+
+```text
+npx @vscode/vsce package
+code --install-extension svg-vscode-0.1.0.vsix
+```
+
+---
+
+示例文件是 `vscode-extension/examples/sample.svg`。
+
+同一目录里还有 `example.svg`、`notes.txt`、普通目录 `assets`，以及名为 `x.svg` 的目录，用来对照哪些项会带标记。
 
 ### 安装扩展前的原生 Outline
 
-2026-11-22，在尚未安装本实验 SVG 扩展的情况下观察。仓库里还没有 `vscode-extension/`。用本机 VS Code（`code --new-window`，中文语言包）打开 `doc/samples/native-outline.svg`。该文件含嵌套 `g`、带 `id` 的 `rect#start`，以及没有 `id` 的 `text`。已安装扩展中没有 Red Hat XML，也没有其他会为 SVG 提供文档符号的扩展。
+在未加载本扩展的 VS Code 中打开 `vscode-extension/examples/sample.svg`。
 
-打开后的实际界面：
+![](images\vscode-native-outline.jpg)
 
-- `.svg` 的默认编辑器是内置 **Image Preview**，状态栏为 `Whole Image`，画面是渲染出来的绿色「开始」矩形，源码没有显示在编辑区。
-- 侧栏「大纲」展开后只有一行：**活动编辑器无法提供大纲信息。** 没有 `svg` / `g` / `rect` 层级，也不能点击跳到某一行。
-- 图片预览是自定义编辑器，不实现文档符号，所以大纲停留在这句空状态。
+- `example.svg` 右侧没有该标记
+- 侧栏「大纲」只有一行：**活动编辑器无法提供大纲信息。** 没有 `svg` / `g` / `rect` 层级，也不能点击跳到某一行。
 
-内置语言贡献（安装目录中的 `extensions/xml/package.json`，版本 10.0.0）把 `.svg` 关联到语言 id `xml`，但只注册了语法高亮和语言配置，没有 `DocumentSymbolProvider`。因此把同一文件改用「文本编辑器」打开后，内置环境仍然不会列出元素大纲；要出现 XML 符号，需要另外安装提供符号的 XML 扩展。这与「先看现有大纲、预期为空」一致。对照图留待扩展实现后，和带层级的大纲截图放在一起；本次先记下上述空状态原文。
+### 文件标记
+
+![](images\vscode-svg-badge.jpg)
+
+扩展开发宿主的资源管理器里，`example.svg` 和 `sample.svg` 右侧是 `[]`，悬停提示为 `SVG file`。
+
+`notes.txt`、目录 `assets`、名为 `x.svg` 的目录都没有这个标记。
+
+`SvgFileDecorationProvider` 只处理 `file` 方案且扩展名（大小写不敏感）为 `.svg` 的路径，再用 `vscode.workspace.fs.stat` 排除目录。返回的 `FileDecoration` 只影响显示，不改文件名和内容。
+
+### 大纲
+
+![](images\vscode-svg-outline.jpg)
+
+`sample.svg` 用文本编辑器打开。大纲从根到叶子是 `svg`、`g#layer`、`g`、`rect#start` 和 `text`。有 `id` 的元素显示 `标签#id`，没有 `id` 的只显示标签名。
+
+选中 `rect#start` 后，编辑器定位到第 4 行的 `<rect id="start" ...>`。
+
+编辑文档后，宿主会重新调用 `provideDocumentSymbols`。provider 不保存文档或上次的符号。文本不良构，或解析过程中出现异常时，`SvgOutlineParser` 返回空数组，大纲清空，异常不抛到宿主外面。
+
+### 职责划分与注册调用过程
+
+**VS Code 负责资源管理器、大纲、文件系统事件、语言选择，以及何时向扩展要数据。**
+
+**扩展负责回答两件事：这个资源要不要标记，这份文档的符号树是什么。**
+
+`activate` 只做装配。`onStartupFinished` 触发后，它调用 `registerFileDecorationProvider` 和 `registerDocumentSymbolProvider`，并把返回的 disposable 放进 `context.subscriptions`。
+
+`.svg` 的默认语言 id 是 `xml`，所以文档符号按文件名 `**/*.svg` 和 language id `svg` 各注册一次。之后宿主在画资源行时调用 `provideFileDecoration`，在打开或编辑文档时调用 `provideDocumentSymbols`。
+
+![](puml\png\vscodeExtension.png)
+
+### 与 Decorator、Adapter 的对应
+
+![](puml\png\vscodeRoles.png)
+
+|            | 文件标记                                         | 大纲                                                        |
+| ---------- | -------------------------------------------- | --------------------------------------------------------- |
+| 宿主接口       | `FileDecorationProvider`                     | `DocumentSymbolProvider`                                  |
+| 插件对象       | `SvgFileDecorationProvider`                  | `SvgDocumentSymbolProvider`                               |
+| 插件持有的对象    | 不持有资源节点                                      | 调用 `SvgOutlineParser`，读取 `OutlineNode`                    |
+| 交回宿主的结果    | `FileDecoration` 或 `undefined`               | `DocumentSymbol[]`                                        |
+| 模式         | 回调式扩展点                                       | Adapter                                                   |
+
+文件标记在「给已有资源补一层显示信息、不改资源本身」上和 Decorator 的意图一致。结构上它不是经典 Decorator：插件对象和资源节点没有同一个接口，也不包裹资源再把调用转发出去。宿主保存 provider，画某一行时再回调；多个 provider 的 badge、tooltip、color 由宿主合并到同一个资源上。这是宿主定义的扩展点。策略决定这一行返回什么，刷新时机由宿主决定，调用关系更接近 Strategy 与 Observer 的组合。
+
+---
+
+大纲是 Adapter。Target 是 `DocumentSymbolProvider`，Client 是 VS Code，Adaptee 是 `SvgOutlineParser` 和它的 `OutlineNode`。`SvgDocumentSymbolProvider` 把文本解析成内部节点，再递归变成 `DocumentSymbol`：有子节点的用 `SymbolKind.Namespace`，叶子用 `SymbolKind.Field`。`range` 覆盖整个元素，`selectionRange` 覆盖标签名，所以点击落在标签所在行。适配解决的是接口不一致；文件标记解决的是在不改原对象的前提下附加显示。
+
+### Phase 1 复用评估
+
+| 模块                              | 结论   |
+| ------------------------------- | ---- |
+| `SvgParser`                     | 不直接复用 |
+| `Shape` / `SvgDocument`         | 不复用  |
+| `fast-xml-parser` 的良构校验         | 复用   |
+| `tag#id` 的命名                    | 沿用约定 |
+
+`SvgParser` 用 `fast-xml-parser` 的 `preserveOrder` 读出元素顺序，结果里没有源码行列。缺 id 时它分配 `标签名+序号`，并通过 `WarningSink` 发出警告，这会改掉大纲应显示的名字。非法 XML 抛 `InvalidValueError`，大纲需要的是空树。它还依赖 `ShapeFactory` 和 `SvgDocument`，会把 CLI 内核带进扩展。
+
+`Shape` 和 `SvgDocument` 携带几何、画布和 id 索引。大纲只需要标签、id、嵌套和源码范围，几何语义用不到。可以借鉴的是 `Shape.label` 的 `tag#id` 写法，以及 `children()` 对容器和叶子的统一遍历。`Shape.label` 在缺 id 时仍然带 `#` 和自动编号；大纲对缺 id 的元素只显示标签名，因此不能原样调用这个 getter。
+
+扩展因此另写了 `SvgOutlineParser`。它先用 `XMLValidator.validate` 判断良构，失败就返回 `[]`；通过后再用 `htmlparser2`（`xmlMode: true`）读取 `startIndex` / `endIndex`，自己把偏移量换成行列。解析不引用 `vscode`，异常也收成空数组。
+
+若以后要让 CLI 和扩展共用一棵带位置的树，应在解析层增加位置信息：让 `SvgParser` 先产出带 range 的中间树，再由 CLI 映射成 `Shape`、由扩展映射成 `DocumentSymbol`。代价是改 `SvgParser` 的输出，并决定自动补 id 是否还留在这一层。当前两边的失败语义不同，这一层还不能直接合并。
 
