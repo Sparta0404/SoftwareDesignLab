@@ -1,0 +1,28 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam sequenceMessageAlign center
+
+actor 用户 as user
+participant "VS Code" as vscode
+participant "extension.activate" as activate
+participant "SvgFileDecorationProvider" as badge
+participant "SvgDocumentSymbolProvider" as symbols
+participant "SvgOutlineParser" as parser
+
+vscode -> activate : onStartupFinished
+activate -> vscode : registerFileDecorationProvider
+activate -> vscode : registerDocumentSymbolProvider
+
+user -> vscode : 渲染资源管理器中的一行
+vscode -> badge : provideFileDecoration(uri)
+badge --> vscode : FileDecoration("[]")\n或 undefined
+vscode --> user : 把标记画到资源行上
+
+user -> vscode : 打开或编辑 .svg
+vscode -> symbols : provideDocumentSymbols(document)
+symbols -> parser : parse(text)
+parser --> symbols : OutlineNode[]
+symbols --> vscode : DocumentSymbol[]
+vscode --> user : 大纲树\n点击后按 selectionRange 定位
+@enduml
