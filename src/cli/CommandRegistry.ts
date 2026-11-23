@@ -1,31 +1,26 @@
-import type { CliHandler } from './handler/CliHandler';
-import type { CliContext } from './CliContext';
+import type { Command, CommandContext } from './Command';
 
-/**
- * 命令名到处理器的注册表。
- *
- * 【待重构】这里是按名字分派的两处之一（另一处是 ShapeFactory）。
- */
+/** 命令名到命令的注册表，按注册顺序保存。 */
 export class CommandRegistry {
-  private readonly handlers = new Map<string, CliHandler>();
+  private readonly commands = new Map<string, Command>();
 
-  register(handler: CliHandler): this {
-    if (this.handlers.has(handler.name)) {
-      throw new Error(`command already registered: ${handler.name}`);
+  register(command: Command): this {
+    if (this.commands.has(command.name)) {
+      throw new Error(`command already registered: ${command.name}`);
     }
-    this.handlers.set(handler.name, handler);
+    this.commands.set(command.name, command);
     return this;
   }
 
   usages(): string[] {
-    return [...this.handlers.values()].map((handler) => handler.usage);
+    return [...this.commands.values()].map((command) => command.usage);
   }
 
-  dispatch(name: string, args: readonly string[], context: CliContext): void {
-    const handler = this.handlers.get(name);
-    if (handler === undefined) {
+  dispatch(name: string, args: readonly string[], context: CommandContext): void {
+    const command = this.commands.get(name);
+    if (command === undefined) {
       throw new Error(`unknown command: ${name}`);
     }
-    handler.execute(args, context);
+    command.execute(args, context);
   }
 }

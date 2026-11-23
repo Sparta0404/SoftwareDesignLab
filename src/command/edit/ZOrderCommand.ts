@@ -22,19 +22,19 @@ export class ZOrderCommand implements EditCommand {
     this.parent = placement.parent;
     this.oldIndex = placement.index;
     this.applyDirection();
-    return `${shape.label} moved to ${this.direction}`;
+    return `${shape.displayLabel} moved to ${this.direction}`;
   }
 
   undo(): string {
     const shape = this.requiredShape();
     this.document.relocate(shape, this.requiredParent(), this.requiredOldIndex());
-    return `${shape.label} z-order restored`;
+    return `${shape.displayLabel} z-order restored`;
   }
 
   redo(): string {
     const shape = this.requiredShape();
     this.applyDirection();
-    return `${shape.label} moved to ${this.direction}`;
+    return `${shape.displayLabel} moved to ${this.direction}`;
   }
 
   private applyDirection(): void {

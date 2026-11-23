@@ -25,21 +25,21 @@ export class AddToCommand implements EditCommand {
     this.container = container;
     this.oldPlacement = this.document.placementOf(shape);
     this.document.relocate(shape, container);
-    return `${shape.label} moved into ${container.label}`;
+    return `${shape.displayLabel} moved into ${container.displayLabel}`;
   }
 
   undo(): string {
     const shape = this.requiredShape();
     const placement = this.requiredPlacement();
     this.document.relocate(shape, placement.parent, placement.index);
-    return `${shape.label} moved back to ${this.document.parentLabel(shape)}`;
+    return `${shape.displayLabel} moved back to ${this.document.parentDisplayLabel(shape)}`;
   }
 
   redo(): string {
     const shape = this.requiredShape();
     const container = this.requiredContainer();
     this.document.relocate(shape, container);
-    return `${shape.label} moved into ${container.label}`;
+    return `${shape.displayLabel} moved into ${container.displayLabel}`;
   }
 
   private requiredShape(): Shape {

@@ -1,12 +1,11 @@
 import { requireArgCount } from '../Arguments';
-import type { CliContext } from '../CliContext';
-import type { CliHandler } from './CliHandler';
+import type { Command, CommandContext } from '../Command';
 
-export class ReadHandler implements CliHandler {
+export class ReadHandler implements Command {
   readonly name = 'read';
   readonly usage = 'read <file.svg>';
 
-  execute(args: readonly string[], context: CliContext): void {
+  execute(args: readonly string[], context: CommandContext): void {
     requireArgCount(args, 1, 1, this.usage);
     context.output.write(context.session.read(args[0]));
   }

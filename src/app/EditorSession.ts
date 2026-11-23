@@ -1,5 +1,6 @@
 import { CommandHistory } from '../command/history/CommandHistory';
 import type { EditCommand } from '../command/history/EditCommand';
+import type { DocumentEvent } from '../model/document/DocumentEvent';
 import { SvgDocument } from '../model/document/SvgDocument';
 import { Numbers } from '../model/shape/Numbers';
 import { FileError } from './error/FileError';
@@ -10,6 +11,7 @@ import type { WarningSink } from './port/WarningSink';
 
 export type CommandFactory = (document: SvgDocument) => EditCommand;
 export type DocumentInspector<T> = (document: SvgDocument) => T;
+export type DocumentListener = (event: DocumentEvent, document: SvgDocument) => void;
 
 /**
  * 编辑会话外观（Facade）。
@@ -22,6 +24,7 @@ export class EditorSession {
   private document: SvgDocument | undefined;
   private currentPath: string | undefined;
   private readonly history = new CommandHistory();
+  private readonly listeners = new Set<DocumentListener>();
 
   constructor(
     private readonly reader: DocumentReader,
@@ -35,6 +38,7 @@ export class EditorSession {
     this.document = next;
     this.currentPath = undefined;
     this.history.lockByIo();
+    this.emit('opened', next);
     return `canvas ${this.size(next)} created`;
   }
 
@@ -44,6 +48,7 @@ export class EditorSession {
     this.document = next;
     this.currentPath = path;
     this.history.lockByIo();
+    this.emit('opened', next);
     return `read ${path} (${next.shapeCount} elements)`;
   }
 
@@ -57,6 +62,7 @@ export class EditorSession {
     this.writer.write(target, document);
     this.currentPath = target;
     this.history.lockByIo();
+    this.emit('saved', document);
     return `saved to ${target} (${document.shapeCount} elements)`;
   }
 
@@ -68,28 +74,57 @@ export class EditorSession {
     }
     document.resize(width, height);
     this.history.lockByIo();
+    this.emit('edited', document);
     return `canvas resized to ${this.size(document)}`;
   }
 
   execute(factory: CommandFactory): string {
     const document = this.requireDocument();
     const command = factory(document);
-    return this.history.execute(command);
+    const result = this.history.execute(command);
+    this.emit('edited', document);
+    return result;
   }
 
   undo(): string {
-    this.requireDocument();
-    return this.history.undo();
+    const document = this.requireDocument();
+    const result = this.history.undo();
+    this.emit('edited', document);
+    return result;
   }
 
   redo(): string {
-    this.requireDocument();
-    return this.history.redo();
+    const document = this.requireDocument();
+    const result = this.history.redo();
+    this.emit('edited', document);
+    return result;
   }
 
   /** 只读用例（tree / show / 测试）通过回调访问当前文档，不暴露可空状态。 */
   inspect<T>(inspector: DocumentInspector<T>): T {
     return inspector(this.requireDocument());
+  }
+
+  /**
+   * 订阅文档生命周期事件（opened / saved / edited），返回取消订阅函数。
+   * 事件在状态更新、命令成功之后发出；监听者抛错只产生警告，不影响命令结果与其他监听者。
+   */
+  subscribe(listener: DocumentListener): () => void {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+
+  private emit(event: DocumentEvent, document: SvgDocument): void {
+    for (const listener of [...this.listeners]) {
+      try {
+        listener(event, document);
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : String(error);
+        this.warningSink.warn(`document listener failed: ${reason}`);
+      }
+    }
   }
 
   private requireDocument(): SvgDocument {

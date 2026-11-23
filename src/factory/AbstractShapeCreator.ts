@@ -1,13 +1,13 @@
 import { Numbers } from '../model/shape/Numbers';
 import { Shape } from '../model/shape/Shape';
 import { InvalidArgumentsError } from './error/InvalidArgumentsError';
-import type { ShapeCreator } from './ShapeCreator';
+import type { ShapeProvider } from './ShapeProvider';
 
 /**
- * 创建器的模板基类：约定参数 = 若干数值几何参数 + 可选的一个样式参数。
+ * 内置提供者的模板基类：约定参数 = 若干数值几何参数 + 可选的一个样式参数。
  * 子类只需声明几何属性名并实现 build。
  */
-export abstract class AbstractShapeCreator implements ShapeCreator {
+export abstract class AbstractShapeCreator implements ShapeProvider {
   abstract readonly typeName: string;
   abstract readonly usage: string;
 
@@ -32,7 +32,18 @@ export abstract class AbstractShapeCreator implements ShapeCreator {
     return shape;
   }
 
-  fromSvg(id: string, attrs: ReadonlyMap<string, string>, text: string): Shape {
+  /** 内置类型：SVG 标签名与类型名相同。 */
+  matches(tag: string): boolean {
+    return tag === this.typeName;
+  }
+
+  /** 内置类型不接管子树：构造自身后把已构造好的子节点原样挂入（叶子会拒绝）。 */
+  fromSvgTree(
+    id: string,
+    attrs: ReadonlyMap<string, string>,
+    text: string,
+    children: readonly Shape[],
+  ): Shape {
     const numbers = this.geometryKeys.map((key) => {
       const raw = attrs.get(key);
       return raw === undefined ? 0 : Numbers.parse(raw);
@@ -47,6 +58,9 @@ export abstract class AbstractShapeCreator implements ShapeCreator {
       } else {
         shape.setExtra(name, value);
       }
+    }
+    for (const child of children) {
+      shape.insertChild(child);
     }
     return shape;
   }

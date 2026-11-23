@@ -1,12 +1,11 @@
 import { parseNumber, requireArgCount } from '../Arguments';
-import type { CliContext } from '../CliContext';
-import type { CliHandler } from './CliHandler';
+import type { Command, CommandContext } from '../Command';
 
-export class CanvasHandler implements CliHandler {
+export class CanvasHandler implements Command {
   readonly name = 'canvas';
   readonly usage = 'canvas [w] [h]';
 
-  execute(args: readonly string[], context: CliContext): void {
+  execute(args: readonly string[], context: CommandContext): void {
     requireArgCount(args, 0, 2, this.usage);
     if (args.length === 0) {
       context.output.write(context.session.canvas());

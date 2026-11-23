@@ -52,43 +52,55 @@ export class SvgParser {
     this.collectExplicitIds(children, usedIds);
     const counters = new Map<string, number>();
 
+    // 每个顶层元素先递归构造出完整子树，再整棵插入：子树内部的 id 冲突由
+    // IdIndex.addAll 整体拒绝，复合图形的提供者也能在组装前看到全部子部件。
     for (const child of children) {
-      this.parseElement(child, document, document.root, warningSink, usedIds, counters);
+      const shape = this.buildElement(child, warningSink, usedIds, counters);
+      if (shape !== undefined) {
+        document.insert(shape, document.root);
+      }
     }
     return document;
   }
 
-  private parseElement(
+  /**
+   * 构造一个元素对应的整棵子树：先（按文档先序）确定自己的 id，再递归构造子元素，
+   * 最后交给匹配的提供者组装。非元素节点返回 undefined。
+   */
+  private buildElement(
     node: OrderedNode,
-    document: SvgDocument,
-    parent: Shape,
     warningSink: WarningSink,
     usedIds: Set<string>,
     counters: Map<string, number>,
-  ): void {
+  ): Shape | undefined {
     const tagName = this.elementName(node);
-    if (tagName === undefined) return; // 缩进文本等非元素节点。
+    if (tagName === undefined) return undefined; // 缩进文本等非元素节点。
 
-    const attributes = this.attributesOf(node);
-    let id = attributes.id;
+    const { id: explicitId, ...attributes } = this.attributesOf(node);
+    let id = explicitId;
     if (id === undefined || id.length === 0) {
       id = this.nextId(tagName, usedIds, counters);
       warningSink.warn(`assigned id ${id} to unnamed <${tagName}>`);
     }
 
-    const children = this.childrenOf(node, tagName);
-    const text = children
+    const childNodes = this.childrenOf(node, tagName);
+    const text = childNodes
       .filter((child) => Object.hasOwn(child, '#text'))
       .map((child) => String(child['#text']))
       .join('');
-    const shape = this.factory.createFromSvg(tagName, id, new Map(Object.entries(attributes)), text);
-    document.insert(shape, parent);
-
-    for (const child of children) {
-      this.parseElement(child, document, shape, warningSink, usedIds, counters);
+    const children: Shape[] = [];
+    for (const child of childNodes) {
+      const shape = this.buildElement(child, warningSink, usedIds, counters);
+      if (shape !== undefined) children.push(shape);
     }
+    return this.factory.createFromSvgTree(
+      tagName,
+      id,
+      new Map(Object.entries(attributes)),
+      text,
+      children,
+    );
   }
-
   private collectExplicitIds(nodes: readonly OrderedNode[], ids: Set<string>): void {
     for (const node of nodes) {
       const tagName = this.elementName(node);
