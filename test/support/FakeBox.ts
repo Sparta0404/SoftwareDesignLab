@@ -5,6 +5,7 @@ import { EditorError } from '../../src/model/error/EditorError';
 import { GroupShape } from '../../src/model/shape/GroupShape';
 import { Numbers } from '../../src/model/shape/Numbers';
 import type { Shape } from '../../src/model/shape/Shape';
+import type { Plugin, PluginContext, PluginManifest } from '../../src/plugin/Plugin';
 import { BuiltinShapes } from '../../src/shapes/BuiltinShapes';
 
 /**
@@ -81,6 +82,18 @@ export class FakeBoxProvider implements ShapeProvider {
 
 export function factoryWithBox(): ShapeFactory {
   return BuiltinShapes.createFactory().register(new FakeBoxProvider());
+}
+
+/** 假 box 作为插件：只依赖插件协议，用来验证宿主与内核钩子。 */
+export const FAKE_BOX_MANIFEST: PluginManifest = {
+  name: 'fake-box',
+  contributes: { shapes: ['box'] },
+};
+
+export class FakeBoxPlugin implements Plugin {
+  activate(context: PluginContext): void {
+    context.registerShape(new FakeBoxProvider());
+  }
 }
 
 /** 把 fill 转发到 rect 子部件、把 label 改写到 text 子部件的属性处理器。 */
