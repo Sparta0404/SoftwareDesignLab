@@ -1,19 +1,26 @@
 /**
- * 依赖方向规则（对应 doc/README.md“依赖方向规则”一节）。
- * 允许的依赖：
+ * 依赖方向规则（对应 doc/README.md“依赖方向规则”一节 + Phase 2 插件边界）。
+ *
+ * Phase 1 允许的依赖：
  *   cli     -> app, command, factory, view
  *   io      -> app(端口), factory, model
  *   app     -> command, model
  *   command -> model
  *   shapes  -> factory, model（内置图形，只有 builtin 与 main 可以引用）
- *   plugin  -> app, cli, command, factory, view, model（插件宿主；cli/内核都不依赖它）
- *   api     -> plugin, app, cli, command, factory, view, model（插件唯一允许依赖的公开门面）
- *   builtin -> plugin, api, shapes, cli, command, factory, view, model（内置能力包装成插件）
- *   loader  -> plugin, api, model（只做字符串到模块，不认识任何具体插件）
  *   factory -> model
  *   view    -> model
  *   model   -> (无)
  *   main    -> 全部（Composition Root）
+ *
+ * Phase 2 追加：
+ *   plugin  -> app, cli, command, factory, view, model（插件宿主；cli/内核都不依赖它）
+ *   api     -> plugin, app, cli, command, factory, view, model（插件唯一允许依赖的公开门面）
+ *   builtin -> plugin, api, shapes, cli, command, factory, view, model（内置能力包装成插件）
+ *   loader  -> plugin, api, model（只做字符串到模块，不认识任何具体插件）
+ *   plugins/* 只能 import src/api 与自身包；插件之间互不引用
+ *   src/（除 main.ts）不 import plugins/
+ *   内核（除 main / builtin / loader）不 import builtin/、loader/、main.ts
+ *
  * 图中没有的依赖一律禁止（同一模块内部除外）。
  * model 内部：error <- shape <- document（箭头指向被依赖方）。
  */
@@ -152,6 +159,13 @@ module.exports = {
       to: { path: except('loader', 'plugin', 'api', 'model') },
     },
     {
+      name: 'loader-no-concrete-plugins',
+      comment: '加载器不得硬编码 import 任何 plugins/*；只按配置字符串解析模块',
+      severity: 'error',
+      from: { path: mod('loader') },
+      to: { path: '^plugins/' },
+    },
+    {
       name: 'only-main-uses-assembly',
       comment: '装配侧（builtin、loader）只有组合根 main.ts 可以引用，内核不认识它们',
       severity: 'error',
@@ -167,7 +181,8 @@ module.exports = {
     },
     {
       name: 'src-no-plugins',
-      comment: '内核与装配代码不得 import plugins/*（插件只经由配置或 main 的装配表接入）',
+      comment:
+        '内核与装配代码不得 import plugins/*（插件只经由配置或 main 的装配表接入；仅 main.ts 可为方式 A 直接引用）',
       severity: 'error',
       from: { path: '^src/', pathNot: '^src/main\\.ts$' },
       to: { path: '^plugins/' },
