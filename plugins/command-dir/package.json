@@ -1,0 +1,10 @@
+{
+  "name": "command-dir",
+  "version": "0.1.0",
+  "description": "dir command plugin: lists the process working directory through a file-system adapter",
+  "main": "../../dist/plugins/command-dir/index.js",
+  "private": true,
+  "contributes": {
+    "commands": ["dir"]
+  }
+}

@@ -11,6 +11,8 @@ import { SvgSerializer } from './io/SvgSerializer';
 import { parseLaunchArguments, PluginLoader, type PluginSource } from './loader';
 import type { Plugin, PluginManifest } from './plugin/Plugin';
 import { PluginHost } from './plugin/PluginHost';
+import dirPlugin, { manifest as dirManifest } from '../plugins/command-dir/index';
+import statsPlugin, { manifest as statsManifest } from '../plugins/command-stats/index';
 
 /** 方式 A（代码装配）的一项：插件对象 + 它的清单 + 可选的激活参数。 */
 export interface PluginEntry {
@@ -23,7 +25,10 @@ export interface PluginEntry {
  * 代码装配的外部插件列表。新增插件时只需在这里加一项；
  * 内置图形与 Phase 1 命令由 `installBuiltins` 装入，不在此列。
  */
-export const CODE_PLUGINS: readonly PluginEntry[] = [];
+export const CODE_PLUGINS: readonly PluginEntry[] = [
+  { plugin: statsPlugin, manifest: statsManifest },
+  { plugin: dirPlugin, manifest: dirManifest },
+];
 
 /**
  * 组装全部模块（Composition Root）。内核各模块互不认识具体图形、命令与插件，

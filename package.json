@@ -14,6 +14,7 @@
     "cli": "tsc && node dist/src/main.js",
     "lint:deps": "depcruise src plugins --config .dependency-cruiser.cjs",
     "metrics": "node scripts/metrics.mjs",
+    "pretest": "tsc",
     "test": "vitest run",
     "test:watch": "vitest"
   },

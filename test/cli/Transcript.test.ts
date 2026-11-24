@@ -48,7 +48,8 @@ describe('实验要求中的 CLI 会话', () => {
     directory = mkdtempSync(join(tmpdir(), 'svg-cli-'));
     stdout = new MemoryStream();
     stderr = new MemoryStream();
-    cli = createCli(stdout, stderr);
+    // 基线对照：禁用全部外部插件（stats、dir 等），输出必须与 Phase 1 final 逐字节一致。
+    cli = createCli(stdout, stderr, { kind: 'none' });
   });
 
   afterEach(() => {
