@@ -16,7 +16,8 @@
     "metrics": "node scripts/metrics.mjs",
     "pretest": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "verify:diff": "node scripts/verify-diff.mjs"
   },
   "repository": {
     "type": "git",
