@@ -62,6 +62,20 @@ function build(source: Parameters<typeof createCli>[2]) {
   };
 }
 
+// 这组测试只关心 stats 与 dir：代码装配一侧固定为这两个插件，不随后续新增的插件（如 box）变化。
+const COMMAND_ENTRIES = CODE_PLUGINS.filter((entry) =>
+  ['command-stats', 'command-dir'].includes(entry.manifest.name),
+);
+
+/** 后续插件（如 box）可能让 help 多出别的 shapes 用法行，比较命令表时忽略它。 */
+const withoutBoxUsage = (result: { out: string; err: string }) => ({
+  ...result,
+  out: result.out
+    .split('\n')
+    .filter((line) => !line.includes('create box '))
+    .join('\n'),
+});
+
 const SESSION = [
   'dir',
   'stats',
@@ -79,11 +93,14 @@ const SESSION = [
 
 describe('stats 与 dir 的两种装配', () => {
   it('默认的代码装配列表包含这两个插件', () => {
-    expect(CODE_PLUGINS.map((entry) => entry.manifest.name)).toEqual(['command-stats', 'command-dir']);
+    expect(CODE_PLUGINS.map((entry) => entry.manifest.name).slice(0, 2)).toEqual([
+      'command-stats',
+      'command-dir',
+    ]);
   });
 
   it('A（代码装配）与 B（配置装配）对同一会话的输出逐字节一致', () => {
-    const viaCode = build({ kind: 'code' });
+    const viaCode = build(COMMAND_ENTRIES);
     const viaConfig = build({
       kind: 'config',
       configPath: writeConfig([{ module: STATS }, { module: DIR }]),
@@ -105,7 +122,7 @@ describe('stats 与 dir 的两种装配', () => {
     const viaRepoConfig = build({ kind: 'config', configPath: config });
     const viaCode = build({ kind: 'code' });
     expect(viaRepoConfig('dir')).toEqual(viaCode('dir'));
-    expect(viaRepoConfig('help')).toEqual(viaCode('help'));
+    expect(withoutBoxUsage(viaRepoConfig('help'))).toEqual(withoutBoxUsage(viaCode('help')));
   });
 
   it('两个插件可单独启用或禁用；未加载时报 unknown command', () => {

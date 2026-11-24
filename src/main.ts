@@ -13,6 +13,7 @@ import type { Plugin, PluginManifest } from './plugin/Plugin';
 import { PluginHost } from './plugin/PluginHost';
 import dirPlugin, { manifest as dirManifest } from '../plugins/command-dir/index';
 import statsPlugin, { manifest as statsManifest } from '../plugins/command-stats/index';
+import boxPlugin, { manifest as boxManifest } from '../plugins/shape-box/index';
 
 /** 方式 A（代码装配）的一项：插件对象 + 它的清单 + 可选的激活参数。 */
 export interface PluginEntry {
@@ -28,6 +29,7 @@ export interface PluginEntry {
 export const CODE_PLUGINS: readonly PluginEntry[] = [
   { plugin: statsPlugin, manifest: statsManifest },
   { plugin: dirPlugin, manifest: dirManifest },
+  { plugin: boxPlugin, manifest: boxManifest },
 ];
 
 /**
