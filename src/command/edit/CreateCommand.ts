@@ -21,7 +21,7 @@ export class CreateCommand implements EditCommand {
 
   undo(): string {
     this.document.detach(this.shape);
-    return `${this.shape.label} deleted`;
+    return `${this.shape.displayLabel} deleted`;
   }
 
   redo(): string {
@@ -37,8 +37,11 @@ export class CreateCommand implements EditCommand {
   }
 
   private createdMessage(): string {
-    return this.parent === this.document.root
-      ? `${this.shape.label} created`
-      : `${this.shape.label} created in ${this.parent.label}`;
+    const base =
+      this.parent === this.document.root
+        ? `${this.shape.displayLabel} created`
+        : `${this.shape.displayLabel} created in ${this.parent.displayLabel}`;
+    const note = this.shape.creationNote();
+    return note === undefined ? base : `${base} ${note}`;
   }
 }

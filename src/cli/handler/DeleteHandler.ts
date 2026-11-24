@@ -1,13 +1,12 @@
 import { DeleteCommand } from '../../command/edit/DeleteCommand';
 import { requireArgCount } from '../Arguments';
-import type { CliContext } from '../CliContext';
-import type { CliHandler } from './CliHandler';
+import type { Command, CommandContext } from '../Command';
 
-export class DeleteHandler implements CliHandler {
+export class DeleteHandler implements Command {
   readonly name = 'delete';
   readonly usage = 'delete <id>';
 
-  execute(args: readonly string[], context: CliContext): void {
+  execute(args: readonly string[], context: CommandContext): void {
     requireArgCount(args, 1, 1, this.usage);
     const result = context.session.execute(
       (document) => new DeleteCommand(document, args[0]),

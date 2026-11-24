@@ -1,6 +1,14 @@
 import { NotContainerError } from '../error/NotContainerError';
 import { UnknownAttributeError } from '../error/UnknownAttributeError';
 
+/** 单个节点的状态快照；对调用者不透明，只能交还给同一节点的 `restoreState`。 */
+export interface ShapeState {
+  readonly geometry: readonly number[];
+  readonly style: ReadonlyMap<string, string>;
+  readonly extras: ReadonlyMap<string, string>;
+  readonly own: unknown;
+}
+
 /**
  * 所有图形的抽象基类（Composite 模式中的 Component）。
  *
@@ -26,6 +34,22 @@ export abstract class Shape {
   /** 命令回显与 tree 中使用的简短标识，如 `rect#r1`。 */
   get label(): string {
     return `${this.tagName}#${this.id}`;
+  }
+
+  /**
+   * 命令回显使用的名字，默认与 `label` 相同。
+   * 复合图形可覆写它（如 `box#n1`）；tree / show 仍使用 `label`，保持与 SVG 标签一致。
+   */
+  get displayLabel(): string {
+    return this.label;
+  }
+
+  /**
+   * create 回显中紧跟在 `created` 之后的补充说明（原样追加，前面补一个空格）；
+   * 默认没有。复合图形可借此列出自己创建的内部部件。
+   */
+  creationNote(): string | undefined {
+    return undefined;
   }
 
   get parent(): Shape | null {
@@ -101,6 +125,32 @@ export abstract class Shape {
   /** 定位点，用于“moved to (x,y)”一类的回显；容器没有定位点。 */
   anchor(): [number, number] | undefined {
     return undefined;
+  }
+
+  // ---------- 状态备忘录（Memento）：属性事务用 ----------
+
+  /**
+   * 捕获本节点自身的可变状态（几何、样式、未知属性与子类自有状态）；不含子节点。
+   * 对 `walk()` 的每个节点各捕获一次，即得到整棵子树的备忘录。
+   * 返回的是值快照，之后再修改图形不会影响它。
+   */
+  captureState(): ShapeState {
+    return {
+      geometry: this.geometryValues(),
+      style: new Map(this.style),
+      extras: new Map(this.extras),
+      own: this.captureOwnState(),
+    };
+  }
+
+  /** 把本节点恢复到 `captureState()` 捕获时的状态。 */
+  restoreState(state: ShapeState): void {
+    this.restoreGeometry(state.geometry);
+    this.style.clear();
+    for (const [name, value] of state.style) this.style.set(name, value);
+    this.extras.clear();
+    for (const [name, value] of state.extras) this.extras.set(name, value);
+    this.restoreOwnState(state.own);
   }
 
   // ---------- 属性（set 命令） ----------
@@ -181,6 +231,13 @@ export abstract class Shape {
   abstract detailLines(): string[];
 
   // ---------- 子类扩展点 ----------
+
+  /** 几何、样式与未知属性之外的自有可变状态（如 text 的内容）；默认没有。 */
+  protected captureOwnState(): unknown {
+    return undefined;
+  }
+
+  protected restoreOwnState(_state: unknown): void {}
 
   /** 样式之外、本类型自有的可 set 属性名。 */
   protected ownAttrNames(): readonly string[] {

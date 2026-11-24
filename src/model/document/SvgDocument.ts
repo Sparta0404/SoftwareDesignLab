@@ -106,6 +106,12 @@ export class SvgDocument {
     return parent === null || parent === this.root ? 'svg' : parent.label;
   }
 
+  /** 命令回显用的父节点名：与 parentLabel 相同，但用 displayLabel。 */
+  parentDisplayLabel(shape: Shape): string {
+    const parent = shape.parent;
+    return parent === null || parent === this.root ? 'svg' : parent.displayLabel;
+  }
+
   private static checkSize(width: number, height: number): void {
     if (!(width > 0) || !(height > 0)) {
       throw new InvalidValueError('canvas size must be positive');

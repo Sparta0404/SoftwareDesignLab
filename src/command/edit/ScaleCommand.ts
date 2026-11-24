@@ -28,7 +28,7 @@ export class ScaleCommand implements EditCommand {
   undo(): string {
     const shape = this.requiredShape();
     restoreGeometry(this.before);
-    return `${shape.label} scale restored`;
+    return `${shape.displayLabel} scale restored`;
   }
 
   redo(): string {
@@ -37,7 +37,7 @@ export class ScaleCommand implements EditCommand {
   }
 
   private scaledMessage(): string {
-    return `${this.requiredShape().label} scaled by ${Numbers.format(this.factor)}`;
+    return `${this.requiredShape().displayLabel} scaled by ${Numbers.format(this.factor)}`;
   }
 
   private requiredShape(): Shape {

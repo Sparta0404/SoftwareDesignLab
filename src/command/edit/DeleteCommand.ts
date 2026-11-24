@@ -15,20 +15,20 @@ export class DeleteCommand implements EditCommand {
   execute(): string {
     this.shape = this.document.find(this.id);
     this.placement = this.document.detach(this.shape);
-    return `${this.shape.label} deleted`;
+    return `${this.shape.displayLabel} deleted`;
   }
 
   undo(): string {
     const shape = this.requiredShape();
     const placement = this.requiredPlacement();
     this.document.insert(shape, placement.parent, placement.index);
-    return `${shape.label} restored into ${this.document.parentLabel(shape)}`;
+    return `${shape.displayLabel} restored into ${this.document.parentDisplayLabel(shape)}`;
   }
 
   redo(): string {
     const shape = this.requiredShape();
     this.document.detach(shape);
-    return `${shape.label} deleted`;
+    return `${shape.displayLabel} deleted`;
   }
 
   private requiredShape(): Shape {

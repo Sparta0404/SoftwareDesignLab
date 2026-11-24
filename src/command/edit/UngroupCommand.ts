@@ -28,7 +28,7 @@ export class UngroupCommand implements EditCommand {
     this.children = [...group.children()];
     this.placement = placement;
     this.applyUngroup();
-    return `${group.label} ungrouped`;
+    return `${group.displayLabel} ungrouped`;
   }
 
   undo(): string {
@@ -41,13 +41,13 @@ export class UngroupCommand implements EditCommand {
     for (const child of this.children) {
       this.document.insert(child, group);
     }
-    return `${group.label} restored with ${this.children.length} children`;
+    return `${group.displayLabel} restored with ${this.children.length} children`;
   }
 
   redo(): string {
     const group = this.requiredGroup();
     this.applyUngroup();
-    return `${group.label} ungrouped`;
+    return `${group.displayLabel} ungrouped`;
   }
 
   private applyUngroup(): void {

@@ -28,9 +28,9 @@ export class MoveCommand implements EditCommand {
     const shape = this.requiredShape();
     restoreGeometry(this.before);
     if (this.originalAnchor !== undefined) {
-      return `${shape.label} moved back to (${this.point(this.originalAnchor)})`;
+      return `${shape.displayLabel} moved back to (${this.point(this.originalAnchor)})`;
     }
-    return `${shape.label} moved back by (${Numbers.format(-this.dx)},${Numbers.format(-this.dy)})`;
+    return `${shape.displayLabel} moved back by (${Numbers.format(-this.dx)},${Numbers.format(-this.dy)})`;
   }
 
   redo(): string {
@@ -42,9 +42,9 @@ export class MoveCommand implements EditCommand {
     const shape = this.requiredShape();
     const anchor = shape.anchor();
     if (anchor !== undefined) {
-      return `${shape.label} moved to (${this.point(anchor)})`;
+      return `${shape.displayLabel} moved to (${this.point(anchor)})`;
     }
-    return `${shape.label} moved by (${Numbers.format(this.dx)},${Numbers.format(this.dy)})`;
+    return `${shape.displayLabel} moved by (${Numbers.format(this.dx)},${Numbers.format(this.dy)})`;
   }
 
   private point([x, y]: readonly [number, number]): string {

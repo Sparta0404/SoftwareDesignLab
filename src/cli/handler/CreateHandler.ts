@@ -1,20 +1,22 @@
 import { CreateCommand } from '../../command/edit/CreateCommand';
 import { InvalidArgumentsError } from '../../factory/error/InvalidArgumentsError';
-import type { CliContext } from '../CliContext';
-import type { CliHandler } from './CliHandler';
+import type { ShapeFactory } from '../../factory/ShapeFactory';
+import type { Command, CommandContext } from '../Command';
 
-export class CreateHandler implements CliHandler {
+export class CreateHandler implements Command {
   readonly name = 'create';
   readonly usage = 'create <type> <id> [params…] [in <containerId>]';
 
-  execute(args: readonly string[], context: CliContext): void {
+  constructor(private readonly factory: ShapeFactory) {}
+
+  execute(args: readonly string[], context: CommandContext): void {
     if (args.length < 2) {
       throw new InvalidArgumentsError(`usage: ${this.usage}`);
     }
     const [type, id, ...rest] = args;
     const { params, containerId } = this.splitIn(rest);
     const result = context.session.execute((document) => {
-      const shape = context.factory.create(type, id, params);
+      const shape = this.factory.create(type, id, params);
       const parent =
         containerId === undefined ? document.root : document.findContainer(containerId);
       return new CreateCommand(document, shape, parent);

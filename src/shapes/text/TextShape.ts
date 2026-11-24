@@ -41,6 +41,14 @@ export class TextShape extends GeometryShape {
     return lines;
   }
 
+  protected override captureOwnState(): unknown {
+    return this.content;
+  }
+
+  protected override restoreOwnState(state: unknown): void {
+    this.content = state as string;
+  }
+
   protected override ownAttrNames(): readonly string[] {
     return [...super.ownAttrNames(), 'text'];
   }
