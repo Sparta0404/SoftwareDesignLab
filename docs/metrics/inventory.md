@@ -1,9 +1,24 @@
 # 文件清单与职责（自动生成）
 
-> 由 `scripts/metrics.mjs` 生成。基线 `final` → `HEAD`。
+> 由 `scripts/metrics.mjs` 生成。基线 `final` → `p2`。
 
-| 路径 | 类别 | 职责 | final 非空行 | HEAD 非空行 | Δ 行 | final CC | HEAD CC | Δ CC |
+| 路径 | 类别 | 职责 | final 非空行 | p2 非空行 | Δ 行 | final CC | p2 CC | Δ CC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| plugins/command-dir/DirCommand.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-dir | 0 | 57 | +57 | 0 | 18 | +18 |
+| plugins/command-dir/DirectoryLister.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-dir | 0 | 15 | +15 | 0 | 0 | 0 |
+| plugins/command-dir/NodeFsDirectoryAdapter.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-dir | 0 | 18 | +18 | 0 | 4 | +4 |
+| plugins/command-dir/index.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-dir | 0 | 24 | +24 | 0 | 3 | +3 |
+| plugins/command-stats/ShapeStatistics.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-stats | 0 | 36 | +36 | 0 | 8 | +8 |
+| plugins/command-stats/StatsCommand.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-stats | 0 | 18 | +18 | 0 | 2 | +2 |
+| plugins/command-stats/index.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：command-stats | 0 | 16 | +16 | 0 | 1 | +1 |
+| plugins/shape-box/BoxAttributeHandler.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：shape-box | 0 | 43 | +43 | 0 | 9 | +9 |
+| plugins/shape-box/BoxProvider.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：shape-box | 0 | 85 | +85 | 0 | 15 | +15 |
+| plugins/shape-box/BoxShape.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：shape-box | 0 | 63 | +63 | 0 | 16 | +16 |
+| plugins/shape-box/BoxTypeLabelDecorator.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：shape-box | 0 | 9 | +9 | 0 | 2 | +2 |
+| plugins/shape-box/index.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：shape-box | 0 | 23 | +23 | 0 | 1 | +1 |
+| plugins/tree-star/ModificationTracker.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：tree-star | 0 | 91 | +91 | 0 | 24 | +24 |
+| plugins/tree-star/ModifiedStarDecorator.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：tree-star | 0 | 16 | +16 | 0 | 4 | +4 |
+| plugins/tree-star/index.ts | 插件 | 外部插件包（stats / dir / box / tree-star 等）：tree-star | 0 | 17 | +17 | 0 | 1 | +1 |
 | src/api/index.ts | 内核 | 插件唯一公开门面（再导出扩展点与领域抽象） | 0 | 39 | +39 | 0 | 0 | 0 |
 | src/app/EditorSession.ts | 内核 | EditorSession 与 IO 端口 | 92 | 125 | +33 | 16 | 22 | +6 |
 | src/app/error/FileError.ts | 内核 | EditorSession 与 IO 端口 | 3 | 3 | 0 | 0 | 0 | 0 |
@@ -78,7 +93,7 @@
 | src/loader/PluginModuleLoader.ts | 装配处 | 配置装配：读 plugins.config.json、按字符串解析模块 | 0 | 121 | +121 | 0 | 29 | +29 |
 | src/loader/error/LoaderError.ts | 装配处 | 配置装配：读 plugins.config.json、按字符串解析模块 | 0 | 21 | +21 | 0 | 3 | +3 |
 | src/loader/index.ts | 装配处 | 配置装配：读 plugins.config.json、按字符串解析模块 | 0 | 14 | +14 | 0 | 0 | 0 |
-| src/main.ts | 装配处 | Composition Root：代码装配 / 配置装配入口 | 30 | 100 | +70 | 2 | 14 | +12 |
+| src/main.ts | 装配处 | Composition Root：代码装配 / 配置装配入口 | 30 | 109 | +79 | 2 | 14 | +12 |
 | src/model/document/DocumentEvent.ts | 内核 | 领域模型：图形树、文档、错误 | 0 | 7 | +7 | 0 | 0 | 0 |
 | src/model/document/IdIndex.ts | 内核 | 领域模型：图形树、文档、错误 | 33 | 33 | 0 | 10 | 10 | 0 |
 | src/model/document/Placement.ts | 内核 | 领域模型：图形树、文档、错误 | 6 | 6 | 0 | 0 | 0 | 0 |

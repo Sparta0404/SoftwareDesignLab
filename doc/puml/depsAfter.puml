@@ -1,0 +1,94 @@
+@startuml
+!pragma layout smetana
+title Phase 2（tag p2）模块依赖：内核只认识扩展点，装配在最外层
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 55
+
+package "装配侧（组合根）" #FFF6D6 {
+  component "main.ts\n方式 A：CODE_PLUGINS" as main
+  component "loader\n方式 B：plugins.config.json" as loader
+  component "builtin\n内置能力包装成插件" as builtin
+}
+
+package "插件包 plugins/*" #DDF2DD {
+  component "command-stats" as stats
+  component "command-dir" as dir
+  component "shape-box" as box
+  component "tree-star" as star
+}
+
+package "内核" #E5EEFF {
+  component "api\n唯一公开门面" as api #FFFFFF
+  component "plugin\nPluginHost" as plugin #FFFFFF
+  component cli
+  component view
+  component command
+  component factory
+  component app
+  component io
+  component model
+}
+
+component "shapes\n六种内置图形" as shapes
+
+main --> builtin
+main --> loader
+main --> plugin
+main ..> stats : 方式 A 直接 import
+main ..> dir
+main ..> box
+main ..> star
+loader --> plugin : install
+builtin --> plugin
+builtin --> api
+builtin --> shapes
+
+stats --> api
+dir --> api
+box --> api
+star --> api
+
+api --> plugin : 只再导出类型
+api --> cli
+api --> view
+api --> command
+api --> factory
+api --> app
+api --> model
+plugin --> cli
+plugin --> view
+plugin --> command
+plugin --> factory
+plugin --> app
+plugin --> model
+
+cli --> app
+cli --> command
+cli --> factory
+cli --> view
+app --> command
+app --> model
+command --> model
+factory --> model
+view --> model
+io --> app
+io --> factory
+io --> model
+shapes --> factory
+shapes --> model
+main --> io
+
+note bottom of loader
+  loader 对插件包只有运行期的字符串解析
+  （require.resolve / require），没有任何静态依赖。
+end note
+
+note bottom of api
+  插件之间互不引用；
+  src/（除 main.ts）不 import plugins/；
+  内核不 import builtin / loader / main。
+end note
+@enduml

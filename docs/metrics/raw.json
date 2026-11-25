@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T11:56:46.845Z",
+  "generatedAt": "2026-11-25T06:05:48.782Z",
   "base": {
     "ref": "final",
     "commit": "3027c5d",
@@ -35,8 +35,8 @@
     }
   },
   "head": {
-    "ref": "HEAD",
-    "commit": "744b97c",
+    "ref": "p2",
+    "commit": "2f19493",
     "byCategory": {
       "kernel": {
         "files": 98,
@@ -47,17 +47,17 @@
       },
       "assembly": {
         "files": 10,
-        "linesTotal": 541,
-        "linesNonBlank": 497,
+        "linesTotal": 550,
+        "linesNonBlank": 506,
         "complexity": 99,
         "functions": 30
       },
       "plugin": {
-        "files": 0,
-        "linesTotal": 0,
-        "linesNonBlank": 0,
-        "complexity": 0,
-        "functions": 0
+        "files": 15,
+        "linesTotal": 607,
+        "linesNonBlank": 531,
+        "complexity": 108,
+        "functions": 57
       },
       "vscode": {
         "files": 6,
@@ -69,11 +69,11 @@
     }
   },
   "cliDelta": {
-    "files": 20,
-    "linesTotal": 1350,
-    "linesNonBlank": 1223,
-    "complexity": 257,
-    "functions": 111
+    "files": 35,
+    "linesTotal": 1966,
+    "linesNonBlank": 1763,
+    "complexity": 365,
+    "functions": 168
   },
   "vscodeDelta": {
     "files": 6,
@@ -83,6 +83,261 @@
     "functions": 21
   },
   "files": [
+    {
+      "path": "plugins/command-dir/DirCommand.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 65,
+          "nonBlank": 57
+        },
+        "complexity": {
+          "total": 18,
+          "functions": 10,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/DirectoryLister.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/NodeFsDirectoryAdapter.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 29,
+          "nonBlank": 24
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/ShapeStatistics.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 41,
+          "nonBlank": 36
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 3,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/StatsCommand.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 20,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 20,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxAttributeHandler.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 49,
+          "nonBlank": 43
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 4,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxProvider.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 92,
+          "nonBlank": 85
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 7,
+          "max": 5
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxShape.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 76,
+          "nonBlank": 63
+        },
+        "complexity": {
+          "total": 16,
+          "functions": 12,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxTypeLabelDecorator.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 11,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 27,
+          "nonBlank": 23
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/ModificationTracker.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 101,
+          "nonBlank": 91
+        },
+        "complexity": {
+          "total": 24,
+          "functions": 8,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/ModifiedStarDecorator.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 2,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 21,
+          "nonBlank": 17
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
     {
       "path": "src/api/index.ts",
       "category": "kernel",
@@ -1918,8 +2173,8 @@
       },
       "head": {
         "lines": {
-          "total": 107,
-          "nonBlank": 100
+          "total": 116,
+          "nonBlank": 109
         },
         "complexity": {
           "total": 14,
