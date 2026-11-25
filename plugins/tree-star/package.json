@@ -1,0 +1,10 @@
+{
+  "name": "tree-star",
+  "version": "0.1.0",
+  "description": "tree decorator plugin: marks nodes that differ from the last opened/saved state with a trailing *",
+  "main": "../../dist/plugins/tree-star/index.js",
+  "private": true,
+  "contributes": {
+    "treeDecorators": ["modified-star"]
+  }
+}
