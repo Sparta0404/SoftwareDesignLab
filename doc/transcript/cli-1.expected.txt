@@ -1,0 +1,96 @@
+svg> init 800 600
+canvas 800x600 created
+svg> create rect bg 0 0 800 600 #ffffff
+rect#bg created
+svg> create text title 20 40 "My Diagram"
+text#title created
+svg> create circle c1 100 100 20 red
+circle#c1 created
+svg> create rect box 200 80 60 60 #3366ff
+rect#box created
+svg> group markers c1 box
+g#markers created with 2 children
+svg> tree
+svg (800x600) *
+├── rect#bg        x=0 y=0 w=800 h=600 fill=#ffffff *
+├── text#title     (20,40) "My Diagram" *
+└── g#markers *
+    ├── circle#c1  cx=100 cy=100 r=20 fill=red *
+    └── rect#box   x=200 y=80 w=60 h=60 fill=#3366ff *
+svg> move c1 30 0
+circle#c1 moved to (130,100)
+svg> undo
+circle#c1 moved back to (100,100)
+svg> redo
+circle#c1 moved to (130,100)
+svg> set title text "My Diagram v2"
+text#title updated: text="My Diagram v2"
+svg> undo
+text#title updated: text="My Diagram"
+svg> show c1
+circle#c1  parent=g#markers
+  cx=130 cy=100 r=20
+  fill=red
+svg> group bad c1 markers
+error: cannot group a container into its own descendant: markers
+svg> frobnicate
+error: unknown command: frobnicate
+svg> set c1 bogus 1
+error: unknown attribute: bogus
+svg> read missing-file.svg
+error: cannot read file: missing-file.svg
+svg> delete box
+rect#box deleted
+svg> undo
+rect#box restored into g#markers
+svg> save demo.svg
+saved to demo.svg (5 elements)
+svg> undo
+error: undo not allowed after io command
+svg> delete markers
+g#markers deleted
+svg> tree
+svg (800x600) *
+├── rect#bg     x=0 y=0 w=800 h=600 fill=#ffffff
+└── text#title  (20,40) "My Diagram"
+svg> read demo.svg
+read demo.svg (5 elements)
+svg> tree
+svg (800x600)
+├── rect#bg        x=0 y=0 w=800 h=600 fill=#ffffff
+├── text#title     (20,40) "My Diagram"
+└── g#markers
+    ├── circle#c1  cx=130 cy=100 r=20 fill=red
+    └── rect#box   x=200 y=80 w=60 h=60 fill=#3366ff
+svg> help
+commands:
+  init [w] [h]
+  read <file.svg>
+  save [file.svg]
+  canvas [w] [h]
+  create <type> <id> [params…] [in <containerId>]
+  delete <id>
+  move <id> <dx> <dy>
+  scale <id> <factor>
+  set <id> <attr> <value>
+  group <newGid> <id>…
+  ungroup <gid>
+  addto <gid> <id>
+  front <id>
+  back <id>
+  tree [id]
+  show <id>
+  undo
+  redo
+  stats
+  dir
+  help
+
+shapes:
+  create rect <id> <x> <y> <w> <h> [fill]
+  create circle <id> <cx> <cy> <r> [fill]
+  create ellipse <id> <cx> <cy> <rx> <ry> [fill]
+  create line <id> <x1> <y1> <x2> <y2> [stroke]
+  create text <id> <x> <y> "content"
+  create g <id>
+  create box <id> <x> <y> <w> <h> "<title>"
