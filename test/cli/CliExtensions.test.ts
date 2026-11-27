@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { EditorSession } from '../../src/app/EditorSession';
 import type { WarningSink } from '../../src/app/port/WarningSink';
-import { Cli } from '../../src/cli/Cli';
 import type { Command, CommandContext } from '../../src/cli/Command';
-import { AttributeHandlerRegistry } from '../../src/command/attribute/AttributeHandlerRegistry';
-import { TreeDecoratorRegistry } from '../../src/view/TreeDecoratorRegistry';
-import { factoryWithBox, FakeBoxAttributeHandler } from '../support/FakeBox';
+import type { TreeDecorator } from '../../src/view/TreeDecorator';
+import { buildBuiltinCli, extensionPlugin, type Extensions } from '../support/BuiltinCli';
+import { FAKE_BOX_MANIFEST, FakeBoxAttributeHandler, FakeBoxPlugin } from '../support/FakeBox';
 
 class RecordingOutput implements WarningSink {
   readonly lines: string[] = [];
@@ -22,14 +21,17 @@ class RecordingOutput implements WarningSink {
   warn(): void {}
 }
 
-function build(extensions: Parameters<typeof Cli.createDefault>[3] = {}) {
+function build(extensions: Extensions = {}) {
   const output = new RecordingOutput();
   const session = new EditorSession(
     { read: () => { throw new Error('unused'); } },
     { write: () => { throw new Error('unused'); } },
     output,
   );
-  const cli = Cli.createDefault(session, factoryWithBox(), output, extensions);
+  const cli = buildBuiltinCli(session, output, [
+    { plugin: new FakeBoxPlugin(), manifest: FAKE_BOX_MANIFEST },
+    extensionPlugin('test-extensions', extensions),
+  ]);
   const run = (...lines: string[]) => {
     output.lines.length = 0;
     output.errors.length = 0;
@@ -77,7 +79,7 @@ describe('Command 接口与扩展命令', () => {
 
   it('与内置命令同名时在装配期失败', () => {
     const clash: Command = { name: 'tree', usage: 'tree', execute: () => undefined };
-    expect(() => build({ commands: [clash] })).toThrow('command already registered: tree');
+    expect(() => build({ commands: [clash] })).toThrow('duplicate registration: commands/tree');
   });
 
   it('扩展命令抛错时和内置命令一样只输出错误', () => {
@@ -111,7 +113,7 @@ describe('扩展点接入内置命令', () => {
   });
 
   it('set 经由注册的属性处理器；一次 undo 整体恢复', () => {
-    const attributeHandlers = new AttributeHandlerRegistry().register(new FakeBoxAttributeHandler());
+    const attributeHandlers = [new FakeBoxAttributeHandler()];
     const { run } = build({ attributeHandlers });
     run('init', 'create box n1 0 0 100 40 "Hi"');
 
@@ -131,21 +133,25 @@ describe('扩展点接入内置命令', () => {
   });
 
   it('tree 带上注册的装饰器；装饰器抛错时只输出错误', () => {
-    const treeDecorators = new TreeDecoratorRegistry().register({
-      name: 'composite',
-      decorate: (node) => (node.shape.isComposite() ? '(box)' : undefined),
-    });
+    const treeDecorators: TreeDecorator[] = [
+      {
+        name: 'composite',
+        decorate: (node) => (node.shape.isComposite() ? '(box)' : undefined),
+      },
+    ];
     const { run } = build({ treeDecorators });
     run('init', 'create box n1 0 0 100 40 "Hi"');
     expect(run('tree').out[0].split('\n')[1]).toBe('└── g#n1 (box)');
     expect(run('tree n1').out[0].split('\n')[0]).toBe('g#n1 (box)');
 
-    const failing = new TreeDecoratorRegistry().register({
-      name: 'bad',
-      decorate: () => {
-        throw new Error('nope');
+    const failing: TreeDecorator[] = [
+      {
+        name: 'bad',
+        decorate: () => {
+          throw new Error('nope');
+        },
       },
-    });
+    ];
     const second = build({ treeDecorators: failing });
     second.run('init');
     expect(second.run('tree')).toEqual({ out: [], err: ['tree decorator failed: bad (nope)'] });

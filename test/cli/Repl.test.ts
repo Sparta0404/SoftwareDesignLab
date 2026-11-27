@@ -3,10 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { EditorSession } from '../../src/app/EditorSession';
 import type { DocumentReader } from '../../src/app/port/DocumentReader';
 import type { DocumentWriter } from '../../src/app/port/DocumentWriter';
-import { Cli } from '../../src/cli/Cli';
 import { ConsoleOutput } from '../../src/cli/ConsoleOutput';
 import { Repl } from '../../src/cli/Repl';
-import { BuiltinShapes } from '../../src/shapes/BuiltinShapes';
+import { buildBuiltinCli } from '../support/BuiltinCli';
 
 class MemoryStream extends Writable {
   text = '';
@@ -28,7 +27,7 @@ describe('Repl', () => {
       output,
     );
     const repl = new Repl(
-      Cli.createDefault(session, BuiltinShapes.createFactory(), output),
+      buildBuiltinCli(session, output),
       input,
       stream,
       output,

@@ -1,0 +1,50 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 50
+skinparam ranksep 60
+
+class "CommandRegistry\n(内核)" as Registry
+interface Command <<内核>> {
+  name
+  usage
+  execute(args, context)
+}
+
+class DirCommand <<Client>> {
+  name = "dir"
+  execute(args, context)
+}
+
+interface DirectoryLister <<Target>> {
+  list(path) : DirectoryEntry[]
+}
+
+class NodeFsDirectoryAdapter <<Adapter>> {
+  list(path) : DirectoryEntry[]
+}
+
+class "node:fs\nreaddirSync(path, {withFileTypes})" as Fs <<Adaptee>>
+
+class DirectoryEntry {
+  name
+  kind : directory | file
+}
+
+Registry o--> Command
+Command <|.. DirCommand
+DirCommand --> DirectoryLister : 只依赖 Target
+DirectoryLister <|.. NodeFsDirectoryAdapter
+NodeFsDirectoryAdapter --> Fs : 转发并转换 Dirent → DirectoryEntry
+DirectoryLister ..> DirectoryEntry
+
+class FakeLister <<测试替身>>
+DirectoryLister <|.. FakeLister
+
+note bottom of DirCommand
+  Client 还持有“当前目录提供者”
+  （生产 = process.cwd，测试 = 固定值）。
+  排序 / 标记 / 空目录 / 错误文案在这里，
+  Adapter 只负责“读目录”。
+end note
+@enduml

@@ -1,0 +1,68 @@
+svg> dir
+[DIR]  sub
+[FILE] .hidden
+[FILE] a.txt
+[FILE] b.txt
+svg> stats
+error: no document. use 'init' or 'read' first
+svg> init 100 100
+canvas 100x100 created
+svg> stats
+(total 0, containers 0)
+svg> create rect r1 0 0 10 10
+rect#r1 created
+svg> create circle c1 5 5 3
+circle#c1 created
+svg> create g g1
+g#g1 created
+svg> create text t1 1 1 "x" in g1
+text#t1 created in g#g1
+svg> create box b1 0 0 40 20 "hi"
+box#b1 created (g#b1 + rect#b1-rect + text#b1-label)
+svg> stats
+rect: 2  circle: 1  text: 2  (total 5, containers 2)
+svg> dir
+[DIR]  sub
+[FILE] .hidden
+[FILE] a.txt
+[FILE] b.txt
+svg> undo
+box#b1 deleted
+svg> stats
+rect: 1  circle: 1  text: 1  (total 3, containers 1)
+svg> undo
+text#t1 deleted
+svg> stats
+rect: 1  circle: 1  (total 2, containers 1)
+svg> help
+commands:
+  init [w] [h]
+  read <file.svg>
+  save [file.svg]
+  canvas [w] [h]
+  create <type> <id> [params…] [in <containerId>]
+  delete <id>
+  move <id> <dx> <dy>
+  scale <id> <factor>
+  set <id> <attr> <value>
+  group <newGid> <id>…
+  ungroup <gid>
+  addto <gid> <id>
+  front <id>
+  back <id>
+  tree [id]
+  show <id>
+  undo
+  redo
+  stats
+  dir
+  help
+
+shapes:
+  create rect <id> <x> <y> <w> <h> [fill]
+  create circle <id> <cx> <cy> <r> [fill]
+  create ellipse <id> <cx> <cy> <rx> <ry> [fill]
+  create line <id> <x1> <y1> <x2> <y2> [stroke]
+  create text <id> <x> <y> "content"
+  create g <id>
+  create box <id> <x> <y> <w> <h> "<title>"

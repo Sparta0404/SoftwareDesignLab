@@ -1,0 +1,91 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam nodesep 40
+skinparam ranksep 50
+left to right direction
+
+package "内核（定义接口 + 调用接口）" {
+  interface ShapeProvider <<扩展点 1>> {
+    typeName / usage
+    fromArgs(id, args, builder)
+    matches(tag, attrs)
+    fromSvgTree(id, attrs, text, children, builder)
+  }
+  class ShapeFactory {
+    create()
+    createFromSvgTree()
+  }
+
+  interface Command <<扩展点 2>> {
+    name / usage
+    execute(args, context)
+  }
+  class CommandRegistry {
+    dispatch()
+  }
+
+  interface TreeDecorator <<扩展点 3>> {
+    name
+    decorate(node)
+    onDocumentEvent?(event, document)
+  }
+  class TreeRenderer {
+    render()
+  }
+
+  interface AttributeHandler <<扩展点 4>> {
+    name
+    handles(target, attr)
+    apply(target, attr, value)
+  }
+  class SetAttrCommand {
+    execute()
+  }
+  class AttributeHandlerRegistry
+
+  class PluginHost {
+    install(plugin, manifest, options)
+  }
+  interface PluginContext {
+    registerShape()
+    registerCommand()
+    registerAttributeHandler()
+    registerTreeDecorator()
+  }
+  interface Plugin {
+    activate(context, options)
+  }
+}
+
+ShapeFactory o--> ShapeProvider
+CommandRegistry o--> Command
+TreeRenderer o--> TreeDecorator
+SetAttrCommand --> AttributeHandlerRegistry
+AttributeHandlerRegistry o--> AttributeHandler
+PluginHost ..> PluginContext : 暂存 → 校验 → 提交
+Plugin ..> PluginContext : activate 时登记
+
+package "plugins/*" {
+  class BoxProvider
+  class BoxAttributeHandler
+  class BoxTypeLabelDecorator
+  class ModifiedStarDecorator
+  class StatsCommand
+  class DirCommand
+}
+
+ShapeProvider <|.. BoxProvider
+AttributeHandler <|.. BoxAttributeHandler
+TreeDecorator <|.. BoxTypeLabelDecorator
+TreeDecorator <|.. ModifiedStarDecorator
+Command <|.. StatsCommand
+Command <|.. DirCommand
+
+package "src/builtin（内置能力）" {
+  class "RectCreator …×6" as Builtin6
+  class "InitHandler …×18" as Builtin18
+}
+ShapeProvider <|.. Builtin6
+Command <|.. Builtin18
+@enduml

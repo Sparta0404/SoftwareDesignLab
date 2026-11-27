@@ -1,0 +1,10 @@
+{
+  "name": "command-stats",
+  "version": "0.1.0",
+  "description": "stats command plugin: counts leaf shapes by type",
+  "main": "../../dist/plugins/command-stats/index.js",
+  "private": true,
+  "contributes": {
+    "commands": ["stats"]
+  }
+}

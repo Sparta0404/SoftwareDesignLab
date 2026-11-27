@@ -1,0 +1,47 @@
+@startuml
+!pragma layout smetana
+title Phase 1（tag final）模块依赖：具体图形与命令在 main 与内核里写死
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 50
+
+component "main.ts\n(Composition Root)" as main #FFE9A8
+
+package "内核" {
+  component model
+  component "factory\nShapeFactory" as factory #FFD0D0
+  component command
+  component app
+  component view
+  component io
+  component "cli\nCommandRegistry\n每条命令一个 CliHandler" as cli #FFD0D0
+}
+
+component "shapes\n六种图形" as shapes #FFD0D0
+
+main --> cli
+main --> io
+main --> shapes : BuiltinShapes\n注册六种图形
+cli --> app
+cli --> command
+cli --> factory
+cli --> view
+app --> command
+app --> model
+command --> model
+shapes --> factory
+shapes --> model
+factory --> model
+view --> model
+io --> app : 实现端口
+io --> factory
+io --> model
+
+note bottom of cli
+  红色 = 两处按名字分派、没有插件接口：
+  CommandRegistry（命令名）、ShapeFactory（类型名）。
+  tree / set 没有任何扩展点。
+end note
+@enduml

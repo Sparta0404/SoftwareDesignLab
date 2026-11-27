@@ -1,0 +1,61 @@
+svg> init 800 600
+canvas 800x600 created
+svg> tree
+svg (800x600)
+svg> create box n1 120 100 160 60 "开始"
+box#n1 created (g#n1 + rect#n1-rect + text#n1-label)
+svg> create line arrow1 280 130 520 130 black
+line#arrow1 created
+svg> tree
+svg (800x600) *
+├── g#n1 (box) *
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9 *
+│   └── text#n1-label  (140,135) "开始" *
+└── line#arrow1        (280,130) -> (520,130) *
+svg> save star-demo.svg
+saved to star-demo.svg (4 elements)
+svg> tree
+svg (800x600)
+├── g#n1 (box)
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9
+│   └── text#n1-label  (140,135) "开始"
+└── line#arrow1        (280,130) -> (520,130)
+svg> set n1 fill #f5a623
+box#n1 fill propagated to n1-rect
+svg> tree
+svg (800x600) *
+├── g#n1 (box)
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#f5a623 *
+│   └── text#n1-label  (140,135) "开始"
+└── line#arrow1        (280,130) -> (520,130)
+svg> undo
+box#n1 fill restored: #4a90d9
+svg> tree
+svg (800x600)
+├── g#n1 (box)
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9
+│   └── text#n1-label  (140,135) "开始"
+└── line#arrow1        (280,130) -> (520,130)
+svg> delete arrow1
+line#arrow1 deleted
+svg> tree
+svg (800x600) *
+└── g#n1 (box)
+    ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9
+    └── text#n1-label  (140,135) "开始"
+svg> undo
+line#arrow1 restored into svg
+svg> tree
+svg (800x600)
+├── g#n1 (box)
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9
+│   └── text#n1-label  (140,135) "开始"
+└── line#arrow1        (280,130) -> (520,130)
+svg> canvas 1024 768
+canvas resized to 1024x768
+svg> tree
+svg (1024x768) *
+├── g#n1 (box)
+│   ├── rect#n1-rect   x=120 y=100 w=160 h=60 fill=#4a90d9
+│   └── text#n1-label  (140,135) "开始"
+└── line#arrow1        (280,130) -> (520,130)

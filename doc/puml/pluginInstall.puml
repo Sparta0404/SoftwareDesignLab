@@ -1,0 +1,32 @@
+@startuml
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+
+participant "装配处\n(main.ts / PluginLoader)" as Assembler
+participant PluginHost
+participant "StagingContext\n(暂存区)" as Staging
+participant Plugin
+participant "各注册表\nShapeFactory / CommandRegistry\nAttributeHandlerRegistry / TreeDecoratorRegistry" as Registries
+
+Assembler -> PluginHost : install(plugin, manifest, options)
+PluginHost -> PluginHost : validateManifest(manifest)\n（失败：manifest mismatch）
+PluginHost -> Staging : new
+PluginHost -> Plugin : activate(staging, options)
+Plugin -> Staging : registerShape / registerCommand /\nregisterAttributeHandler / registerTreeDecorator
+note right of Staging : 只是暂存；内核此时看不到
+PluginHost -> Staging : close()\n之后再 register 就抛错
+alt activate 抛错
+  PluginHost --> Assembler : plugin failed to activate: <name> (<reason>)\n暂存区被丢弃
+end
+PluginHost -> PluginHost : checkManifest(manifest, staging)\n声明 == 实际注册？
+alt 不一致
+  PluginHost --> Assembler : plugin manifest mismatch: <name> (…)
+end
+PluginHost -> PluginHost : checkDuplicates(staging)\n与已提交、与暂存内部都不得重名
+alt 重名
+  PluginHost --> Assembler : duplicate registration: <category>/<name>
+end
+PluginHost -> Registries : commit：一次性登记全部暂存项
+PluginHost -> PluginHost : 带 onDocumentEvent 的装饰器\n同时 session.subscribe
+PluginHost --> Assembler : 成功
+@enduml

@@ -1,22 +1,36 @@
 /**
- * 依赖方向规则（对应 doc/README.md“依赖方向规则”一节）。
- * 允许的依赖：
+ * 依赖方向规则（对应 doc/README.md“依赖方向规则”一节 + Phase 2 插件边界）。
+ *
+ * Phase 1 允许的依赖：
  *   cli     -> app, command, factory, view
  *   io      -> app(端口), factory, model
  *   app     -> command, model
  *   command -> model
- *   shapes  -> factory, model（内置图形，只有 main 可以引用）
+ *   shapes  -> factory, model（内置图形，只有 builtin 与 main 可以引用）
  *   factory -> model
  *   view    -> model
  *   model   -> (无)
  *   main    -> 全部（Composition Root）
+ *
+ * Phase 2 追加：
+ *   plugin  -> app, cli, command, factory, view, model（插件宿主；cli/内核都不依赖它）
+ *   api     -> plugin, app, cli, command, factory, view, model（插件唯一允许依赖的公开门面）
+ *   builtin -> plugin, api, shapes, cli, command, factory, view, model（内置能力包装成插件）
+ *   loader  -> plugin, api, model（只做字符串到模块，不认识任何具体插件）
+ *   plugins/* 只能 import src/api 与自身包；插件之间互不引用
+ *   src/（除 main.ts）不 import plugins/
+ *   内核（除 main / builtin / loader）不 import builtin/、loader/、main.ts
+ *
  * 图中没有的依赖一律禁止（同一模块内部除外）。
  * model 内部：error <- shape <- document（箭头指向被依赖方）。
  */
 
 /** 用模块名构造 src/<module>/ 路径的正则 */
 const mod = (...names) => `^src/(${names.join('|')})/`;
-const all = ['model', 'factory', 'shapes', 'command', 'app', 'io', 'view', 'cli'];
+const all = [
+  'model', 'factory', 'shapes', 'command', 'app', 'io', 'view', 'cli',
+  'plugin', 'api', 'builtin', 'loader',
+];
 /** 除 allowed 与自身外的所有模块，用于“只允许依赖白名单”的规则 */
 const except = (self, ...allowed) =>
   mod(...all.filter((m) => m !== self && !allowed.includes(m)));
@@ -115,10 +129,69 @@ module.exports = {
       to: { path: except('cli', 'app', 'command', 'factory', 'view') },
     },
     {
-      name: 'only-main-uses-shapes',
-      comment: '规则 7：具体图形类型只在 Composition Root 中注册，内核不认识它们',
+      name: 'plugin-allowed-deps',
+      comment: '插件宿主只依赖内核扩展点所在模块，不依赖 io、shapes、builtin、loader、api',
       severity: 'error',
-      from: { path: '^src/', pathNot: ['^src/main\\.ts$', '^src/shapes/'] },
+      from: { path: mod('plugin') },
+      to: { path: except('plugin', 'app', 'cli', 'command', 'factory', 'view', 'model') },
+    },
+    {
+      name: 'api-allowed-deps',
+      comment: '门面只再导出内核的扩展点接口与公开领域抽象',
+      severity: 'error',
+      from: { path: mod('api') },
+      to: { path: except('api', 'plugin', 'app', 'cli', 'command', 'factory', 'view', 'model') },
+    },
+    {
+      name: 'builtin-allowed-deps',
+      comment: '内置插件包装只依赖宿主、门面、内置图形与命令处理器；不碰 io、loader',
+      severity: 'error',
+      from: { path: mod('builtin') },
+      to: {
+        path: except('builtin', 'plugin', 'api', 'shapes', 'cli', 'command', 'factory', 'view', 'model'),
+      },
+    },
+    {
+      name: 'loader-allowed-deps',
+      comment: '加载器只依赖宿主与门面，不含任何具体插件、图形或命令',
+      severity: 'error',
+      from: { path: mod('loader') },
+      to: { path: except('loader', 'plugin', 'api', 'model') },
+    },
+    {
+      name: 'loader-no-concrete-plugins',
+      comment: '加载器不得硬编码 import 任何 plugins/*；只按配置字符串解析模块',
+      severity: 'error',
+      from: { path: mod('loader') },
+      to: { path: '^plugins/' },
+    },
+    {
+      name: 'only-main-uses-assembly',
+      comment: '装配侧（builtin、loader）只有组合根 main.ts 可以引用，内核不认识它们',
+      severity: 'error',
+      from: { path: '^src/', pathNot: ['^src/main\\.ts$', '^src/(builtin|loader)/'] },
+      to: { path: mod('builtin', 'loader') },
+    },
+    {
+      name: 'plugins-only-api',
+      comment: '插件包（plugins/*）只能 import src/api 与自身；插件之间互不引用',
+      severity: 'error',
+      from: { path: '^plugins/([^/]+)/' },
+      to: { path: '^(src|plugins)/', pathNot: ['^src/api/', '^plugins/$1/'] },
+    },
+    {
+      name: 'src-no-plugins',
+      comment:
+        '内核与装配代码不得 import plugins/*（插件只经由配置或 main 的装配表接入；仅 main.ts 可为方式 A 直接引用）',
+      severity: 'error',
+      from: { path: '^src/', pathNot: '^src/main\\.ts$' },
+      to: { path: '^plugins/' },
+    },
+    {
+      name: 'only-main-uses-shapes',
+      comment: '规则 7：具体图形类型只在装配侧（main、builtin）注册，内核不认识它们',
+      severity: 'error',
+      from: { path: '^src/', pathNot: ['^src/main\\.ts$', '^src/shapes/', '^src/builtin/'] },
       to: { path: mod('shapes') },
     },
     {

@@ -1,0 +1,3181 @@
+{
+  "generatedAt": "2026-11-25T06:05:48.782Z",
+  "base": {
+    "ref": "final",
+    "commit": "3027c5d",
+    "byCategory": {
+      "kernel": {
+        "files": 87,
+        "linesTotal": 2634,
+        "linesNonBlank": 2279,
+        "complexity": 477,
+        "functions": 298
+      },
+      "assembly": {
+        "files": 1,
+        "linesTotal": 33,
+        "linesNonBlank": 30,
+        "complexity": 2,
+        "functions": 2
+      },
+      "plugin": {
+        "files": 0,
+        "linesTotal": 0,
+        "linesNonBlank": 0,
+        "complexity": 0,
+        "functions": 0
+      },
+      "vscode": {
+        "files": 0,
+        "linesTotal": 0,
+        "linesNonBlank": 0,
+        "complexity": 0,
+        "functions": 0
+      }
+    }
+  },
+  "head": {
+    "ref": "p2",
+    "commit": "2f19493",
+    "byCategory": {
+      "kernel": {
+        "files": 98,
+        "linesTotal": 3476,
+        "linesNonBlank": 3035,
+        "complexity": 637,
+        "functions": 381
+      },
+      "assembly": {
+        "files": 10,
+        "linesTotal": 550,
+        "linesNonBlank": 506,
+        "complexity": 99,
+        "functions": 30
+      },
+      "plugin": {
+        "files": 15,
+        "linesTotal": 607,
+        "linesNonBlank": 531,
+        "complexity": 108,
+        "functions": 57
+      },
+      "vscode": {
+        "files": 6,
+        "linesTotal": 325,
+        "linesNonBlank": 301,
+        "complexity": 77,
+        "functions": 21
+      }
+    }
+  },
+  "cliDelta": {
+    "files": 35,
+    "linesTotal": 1966,
+    "linesNonBlank": 1763,
+    "complexity": 365,
+    "functions": 168
+  },
+  "vscodeDelta": {
+    "files": 6,
+    "linesTotal": 325,
+    "linesNonBlank": 301,
+    "complexity": 77,
+    "functions": 21
+  },
+  "files": [
+    {
+      "path": "plugins/command-dir/DirCommand.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 65,
+          "nonBlank": 57
+        },
+        "complexity": {
+          "total": 18,
+          "functions": 10,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/DirectoryLister.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/NodeFsDirectoryAdapter.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "plugins/command-dir/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-dir",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 29,
+          "nonBlank": 24
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/ShapeStatistics.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 41,
+          "nonBlank": 36
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 3,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/StatsCommand.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 20,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/command-stats/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：command-stats",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 20,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxAttributeHandler.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 49,
+          "nonBlank": 43
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 4,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxProvider.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 92,
+          "nonBlank": 85
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 7,
+          "max": 5
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxShape.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 76,
+          "nonBlank": 63
+        },
+        "complexity": {
+          "total": 16,
+          "functions": 12,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/BoxTypeLabelDecorator.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 11,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "plugins/shape-box/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：shape-box",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 27,
+          "nonBlank": 23
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/ModificationTracker.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 101,
+          "nonBlank": 91
+        },
+        "complexity": {
+          "total": 24,
+          "functions": 8,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/ModifiedStarDecorator.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 2,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "plugins/tree-star/index.ts",
+      "category": "plugin",
+      "role": "外部插件包（stats / dir / box / tree-star 等）：tree-star",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 21,
+          "nonBlank": 17
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/api/index.ts",
+      "category": "kernel",
+      "role": "插件唯一公开门面（再导出扩展点与领域抽象）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 44,
+          "nonBlank": 39
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/app/EditorSession.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 105,
+          "nonBlank": 92
+        },
+        "complexity": {
+          "total": 16,
+          "functions": 11,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 140,
+          "nonBlank": 125
+        },
+        "complexity": {
+          "total": 22,
+          "functions": 14,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "src/app/error/FileError.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/app/error/NoDocumentError.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/app/port/DocumentReader.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 10,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 10,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/app/port/DocumentWriter.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 6,
+          "nonBlank": 5
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 6,
+          "nonBlank": 5
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/app/port/WarningSink.ts",
+      "category": "kernel",
+      "role": "EditorSession 与 IO 端口",
+      "base": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 4
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 4
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/builtin/BuiltinCommandsPlugin.ts",
+      "category": "assembly",
+      "role": "把内置图形与 Phase 1 命令包装成插件",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 68,
+          "nonBlank": 64
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 3,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/builtin/BuiltinShapesPlugin.ts",
+      "category": "assembly",
+      "role": "把内置图形与 Phase 1 命令包装成插件",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/builtin/index.ts",
+      "category": "assembly",
+      "role": "把内置图形与 Phase 1 命令包装成插件",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/Arguments.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 21,
+          "nonBlank": 19
+        },
+        "complexity": {
+          "total": 6,
+          "functions": 2,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 21,
+          "nonBlank": 19
+        },
+        "complexity": {
+          "total": 6,
+          "functions": 2,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/cli/Cli.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 73,
+          "nonBlank": 69
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 3,
+          "max": 6
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 45,
+          "nonBlank": 41
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 3,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "src/cli/CliContext.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 10,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": null
+    },
+    {
+      "path": "src/cli/Command.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 23
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/cli/CommandRegistry.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 31,
+          "nonBlank": 27
+        },
+        "complexity": {
+          "total": 6,
+          "functions": 4,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 26,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 6,
+          "functions": 4,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/cli/ConsoleOutput.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 22,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 4,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 22,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 4,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/Repl.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 28,
+          "nonBlank": 26
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 28,
+          "nonBlank": 26
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/TextOutput.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 5,
+          "nonBlank": 5
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 5,
+          "nonBlank": 5
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/cli/Tokenizer.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 23,
+          "nonBlank": 23
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 1,
+          "max": 9
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 23,
+          "nonBlank": 23
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 1,
+          "max": 9
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/AddToHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/CanvasHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 17
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 1,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 1,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/CliHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": null
+    },
+    {
+      "path": "src/cli/handler/CreateHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 33,
+          "nonBlank": 30
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 3,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 35,
+          "nonBlank": 31
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 4,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/DeleteHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/GroupHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/HelpHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 4,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 21,
+          "nonBlank": 18
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 4,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/InitHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 15,
+          "nonBlank": 13
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 1,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 14,
+          "nonBlank": 12
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 1,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/MoveHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/ReadHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/RedoHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/SaveHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/ScaleHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/SetHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/ShowHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 15,
+          "nonBlank": 13
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 14,
+          "nonBlank": 12
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/TreeHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/UndoHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/UngroupHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 16,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/cli/handler/ZOrderHandler.ts",
+      "category": "kernel",
+      "role": "REPL、命令分派与 Command 扩展点",
+      "base": {
+        "lines": {
+          "total": 20,
+          "nonBlank": 17
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/attribute/AttributeHandler.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 28,
+          "nonBlank": 26
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/command/attribute/AttributeHandlerRegistry.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 24,
+          "nonBlank": 20
+        },
+        "complexity": {
+          "total": 5,
+          "functions": 4,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/AddToCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 59,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 12,
+          "functions": 7,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 59,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 12,
+          "functions": 7,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/CommandSnapshots.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 3,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 3,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/CreateCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 44,
+          "nonBlank": 37
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 6,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 47,
+          "nonBlank": 40
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 6,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/DeleteCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 43,
+          "nonBlank": 36
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 6,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 43,
+          "nonBlank": 36
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 6,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/GroupCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 100,
+          "nonBlank": 88
+        },
+        "complexity": {
+          "total": 23,
+          "functions": 12,
+          "max": 8
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 118,
+          "nonBlank": 105
+        },
+        "complexity": {
+          "total": 27,
+          "functions": 13,
+          "max": 8
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/MoveCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 58,
+          "nonBlank": 50
+        },
+        "complexity": {
+          "total": 10,
+          "functions": 7,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 58,
+          "nonBlank": 50
+        },
+        "complexity": {
+          "total": 10,
+          "functions": 7,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/ScaleCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 47,
+          "nonBlank": 40
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 6,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 47,
+          "nonBlank": 40
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 6,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/SetAttrCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 48,
+          "nonBlank": 41
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 6,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 161,
+          "nonBlank": 146
+        },
+        "complexity": {
+          "total": 46,
+          "functions": 24,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/UngroupCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 74,
+          "nonBlank": 66
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 8,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 74,
+          "nonBlank": 66
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 8,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/command/edit/ZOrderCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 61,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 12,
+          "functions": 8,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 61,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 12,
+          "functions": 8,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/error/AttributeHandlerConflictError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 10,
+          "nonBlank": 9
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/EmptyHistoryError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/GroupIntoDescendantError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 8,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 8,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/InvalidScaleFactorError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/UndoNotAllowedError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/UngroupCompositeError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/error/UngroupTopLevelError.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/command/history/CommandHistory.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 57,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 5,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 57,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 5,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/command/history/EditCommand.ts",
+      "category": "kernel",
+      "role": "编辑命令、属性处理器扩展点、历史栈",
+      "base": {
+        "lines": {
+          "total": 11,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 11,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/factory/AbstractShapeCreator.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": {
+        "lines": {
+          "total": 53,
+          "nonBlank": 47
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 4,
+          "max": 6
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 67,
+          "nonBlank": 60
+        },
+        "complexity": {
+          "total": 17,
+          "functions": 5,
+          "max": 7
+        }
+      }
+    },
+    {
+      "path": "src/factory/ShapeCreator.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": {
+        "lines": {
+          "total": 19,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": null
+    },
+    {
+      "path": "src/factory/ShapeFactory.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": {
+        "lines": {
+          "total": 47,
+          "nonBlank": 40
+        },
+        "complexity": {
+          "total": 9,
+          "functions": 7,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 91,
+          "nonBlank": 81
+        },
+        "complexity": {
+          "total": 16,
+          "functions": 11,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/factory/ShapeProvider.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 47,
+          "nonBlank": 41
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/factory/error/InvalidArgumentsError.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/factory/error/UnknownShapeTypeError.ts",
+      "category": "kernel",
+      "role": "图形工厂与 ShapeProvider 扩展点",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/io/FileDocumentStore.ts",
+      "category": "kernel",
+      "role": "SVG 解析/序列化与文件存储",
+      "base": {
+        "lines": {
+          "total": 36,
+          "nonBlank": 33
+        },
+        "complexity": {
+          "total": 5,
+          "functions": 3,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 36,
+          "nonBlank": 33
+        },
+        "complexity": {
+          "total": 5,
+          "functions": 3,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/io/SvgParser.ts",
+      "category": "kernel",
+      "role": "SVG 解析/序列化与文件存储",
+      "base": {
+        "lines": {
+          "total": 131,
+          "nonBlank": 113
+        },
+        "complexity": {
+          "total": 31,
+          "functions": 13,
+          "max": 5
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 143,
+          "nonBlank": 127
+        },
+        "complexity": {
+          "total": 33,
+          "functions": 13,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "src/io/SvgSerializer.ts",
+      "category": "kernel",
+      "role": "SVG 解析/序列化与文件存储",
+      "base": {
+        "lines": {
+          "total": 61,
+          "nonBlank": 55
+        },
+        "complexity": {
+          "total": 11,
+          "functions": 5,
+          "max": 6
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 61,
+          "nonBlank": 55
+        },
+        "complexity": {
+          "total": 11,
+          "functions": 5,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "src/loader/LaunchArguments.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 49,
+          "nonBlank": 45
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 2,
+          "max": 13
+        }
+      }
+    },
+    {
+      "path": "src/loader/PluginConfig.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 61,
+          "nonBlank": 56
+        },
+        "complexity": {
+          "total": 25,
+          "functions": 6,
+          "max": 9
+        }
+      }
+    },
+    {
+      "path": "src/loader/PluginLoader.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 55,
+          "nonBlank": 51
+        },
+        "complexity": {
+          "total": 6,
+          "functions": 2,
+          "max": 5
+        }
+      }
+    },
+    {
+      "path": "src/loader/PluginModuleLoader.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 134,
+          "nonBlank": 121
+        },
+        "complexity": {
+          "total": 29,
+          "functions": 8,
+          "max": 7
+        }
+      }
+    },
+    {
+      "path": "src/loader/error/LoaderError.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 21
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/loader/index.ts",
+      "category": "assembly",
+      "role": "配置装配：读 plugins.config.json、按字符串解析模块",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 14,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/main.ts",
+      "category": "assembly",
+      "role": "Composition Root：代码装配 / 配置装配入口",
+      "base": {
+        "lines": {
+          "total": 33,
+          "nonBlank": 30
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 116,
+          "nonBlank": 109
+        },
+        "complexity": {
+          "total": 14,
+          "functions": 4,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "src/model/document/DocumentEvent.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/model/document/IdIndex.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 39,
+          "nonBlank": 33
+        },
+        "complexity": {
+          "total": 10,
+          "functions": 5,
+          "max": 5
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 39,
+          "nonBlank": 33
+        },
+        "complexity": {
+          "total": 10,
+          "functions": 5,
+          "max": 5
+        }
+      }
+    },
+    {
+      "path": "src/model/document/Placement.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/model/document/SvgDocument.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 114,
+          "nonBlank": 98
+        },
+        "complexity": {
+          "total": 24,
+          "functions": 14,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 120,
+          "nonBlank": 103
+        },
+        "complexity": {
+          "total": 27,
+          "functions": 15,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/model/error/ContractViolationError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 8,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/EditorError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 7
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/IdExistsError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/InvalidValueError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 4,
+          "nonBlank": 3
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/model/error/NoSuchContainerError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/NoSuchShapeError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/NotContainerError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/error/UnknownAttributeError.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 7,
+          "nonBlank": 6
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/model/shape/GeometryShape.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 96,
+          "nonBlank": 80
+        },
+        "complexity": {
+          "total": 24,
+          "functions": 17,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 96,
+          "nonBlank": 80
+        },
+        "complexity": {
+          "total": 24,
+          "functions": 17,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/model/shape/GroupShape.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 62,
+          "nonBlank": 52
+        },
+        "complexity": {
+          "total": 14,
+          "functions": 9,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 62,
+          "nonBlank": 52
+        },
+        "complexity": {
+          "total": 14,
+          "functions": 9,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/model/shape/Numbers.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 5,
+          "functions": 2,
+          "max": 3
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 16
+        },
+        "complexity": {
+          "total": 5,
+          "functions": 2,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "src/model/shape/Shape.ts",
+      "category": "kernel",
+      "role": "领域模型：图形树、文档、错误",
+      "base": {
+        "lines": {
+          "total": 214,
+          "nonBlank": 173
+        },
+        "complexity": {
+          "total": 43,
+          "functions": 28,
+          "max": 4
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 271,
+          "nonBlank": 222
+        },
+        "complexity": {
+          "total": 51,
+          "functions": 34,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "src/plugin/Plugin.ts",
+      "category": "kernel",
+      "role": "PluginHost：暂存注册、清单校验、原子提交",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 51,
+          "nonBlank": 45
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/plugin/PluginHost.ts",
+      "category": "kernel",
+      "role": "PluginHost：暂存注册、清单校验、原子提交",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 242,
+          "nonBlank": 217
+        },
+        "complexity": {
+          "total": 60,
+          "functions": 29,
+          "max": 9
+        }
+      }
+    },
+    {
+      "path": "src/plugin/error/PluginError.ts",
+      "category": "kernel",
+      "role": "PluginHost：暂存注册、清单校验、原子提交",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 26,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 3,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/shapes/BuiltinShapes.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 24,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 34,
+          "nonBlank": 31
+        },
+        "complexity": {
+          "total": 4,
+          "functions": 3,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/shapes/circle/CircleCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/circle/CircleShape.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 24,
+          "nonBlank": 21
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 24,
+          "nonBlank": 21
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/ellipse/EllipseCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/ellipse/EllipseShape.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/group/GroupCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 12,
+          "nonBlank": 10
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/line/LineCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/line/LineShape.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/rect/RectCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 13,
+          "nonBlank": 11
+        },
+        "complexity": {
+          "total": 1,
+          "functions": 1,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/rect/RectShape.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 25,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 3,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/shapes/text/TextCreator.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 22,
+          "nonBlank": 19
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 2,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 22,
+          "nonBlank": 19
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/shapes/text/TextShape.ts",
+      "category": "kernel",
+      "role": "六种内置图形实现（由 builtin 包装注册）",
+      "base": {
+        "lines": {
+          "total": 59,
+          "nonBlank": 49
+        },
+        "complexity": {
+          "total": 13,
+          "functions": 9,
+          "max": 2
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 67,
+          "nonBlank": 55
+        },
+        "complexity": {
+          "total": 15,
+          "functions": 11,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/view/ShowRenderer.ts",
+      "category": "kernel",
+      "role": "tree/show 渲染与 TreeDecorator 扩展点",
+      "base": {
+        "lines": {
+          "total": 15,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 15,
+          "nonBlank": 14
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "src/view/TreeDecorator.ts",
+      "category": "kernel",
+      "role": "tree/show 渲染与 TreeDecorator 扩展点",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 27,
+          "nonBlank": 25
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "src/view/TreeDecoratorRegistry.ts",
+      "category": "kernel",
+      "role": "tree/show 渲染与 TreeDecorator 扩展点",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 18,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 3,
+          "functions": 2,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "src/view/TreeRenderer.ts",
+      "category": "kernel",
+      "role": "tree/show 渲染与 TreeDecorator 扩展点",
+      "base": {
+        "lines": {
+          "total": 70,
+          "nonBlank": 60
+        },
+        "complexity": {
+          "total": 22,
+          "functions": 9,
+          "max": 4
+        }
+      },
+      "head": {
+        "lines": {
+          "total": 100,
+          "nonBlank": 88
+        },
+        "complexity": {
+          "total": 29,
+          "functions": 11,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "src/view/error/TreeDecoratorError.ts",
+      "category": "kernel",
+      "role": "tree/show 渲染与 TreeDecorator 扩展点",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 9,
+          "nonBlank": 8
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 1,
+          "max": 2
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/badge/SvgFileDecorationProvider.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 34,
+          "nonBlank": 32
+        },
+        "complexity": {
+          "total": 8,
+          "functions": 2,
+          "max": 4
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/badge/isSvgPath.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 35,
+          "nonBlank": 31
+        },
+        "complexity": {
+          "total": 10,
+          "functions": 3,
+          "max": 6
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/extension.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 17,
+          "nonBlank": 15
+        },
+        "complexity": {
+          "total": 2,
+          "functions": 2,
+          "max": 1
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/outline/SvgDocumentSymbolProvider.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 51,
+          "nonBlank": 47
+        },
+        "complexity": {
+          "total": 7,
+          "functions": 4,
+          "max": 3
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/outline/SvgOutlineNode.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 24,
+          "nonBlank": 22
+        },
+        "complexity": {
+          "total": 0,
+          "functions": 0,
+          "max": 0
+        }
+      }
+    },
+    {
+      "path": "vscode-extension/src/outline/SvgOutlineParser.ts",
+      "category": "vscode",
+      "role": "Lab2 第一部分：SVG 标记与大纲（不计入 CLI 增量）",
+      "base": null,
+      "head": {
+        "lines": {
+          "total": 164,
+          "nonBlank": 154
+        },
+        "complexity": {
+          "total": 50,
+          "functions": 10,
+          "max": 14
+        }
+      }
+    }
+  ]
+}

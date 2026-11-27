@@ -1,0 +1,28 @@
+# 标签插件会话：modified-star（`*`）与 box 的 `(box)` 并存
+# 只含命令与注释；预期输出见 tree-star.expected.txt
+init 800 600
+tree
+
+create box n1 120 100 160 60 "开始"
+create line arrow1 280 130 520 130 black
+tree
+
+# 保存之后，内容与保存点一致，所有 * 消失
+save star-demo.svg
+tree
+
+# 只标记真正变化的节点；box 容器自己没变，所以不带 *，文档根带 *
+set n1 fill #f5a623
+tree
+undo
+tree
+
+# 删除让文档根带 *，undo 回到保存点后消失
+delete arrow1
+tree
+undo
+tree
+
+# 画布尺寸只让文档根带 *
+canvas 1024 768
+tree

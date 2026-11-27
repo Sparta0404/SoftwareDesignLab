@@ -1,0 +1,12 @@
+{
+  "name": "shape-box",
+  "version": "0.1.0",
+  "description": "box shape plugin: a titled rectangle (rect + text) that is itself a container, with fill/label attribute semantics and a (box) tree tag",
+  "main": "../../dist/plugins/shape-box/index.js",
+  "private": true,
+  "contributes": {
+    "shapes": ["box"],
+    "attributeHandlers": ["box-attributes"],
+    "treeDecorators": ["box-type-label"]
+  }
+}

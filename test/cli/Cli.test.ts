@@ -3,8 +3,7 @@ import { EditorSession } from '../../src/app/EditorSession';
 import type { DocumentReader } from '../../src/app/port/DocumentReader';
 import type { DocumentWriter } from '../../src/app/port/DocumentWriter';
 import type { WarningSink } from '../../src/app/port/WarningSink';
-import { Cli } from '../../src/cli/Cli';
-import { BuiltinShapes } from '../../src/shapes/BuiltinShapes';
+import { buildBuiltinCli } from '../support/BuiltinCli';
 
 class RecordingOutput implements WarningSink {
   readonly lines: string[] = [];
@@ -43,7 +42,7 @@ function unusedWriter(): DocumentWriter {
 function createCli() {
   const output = new RecordingOutput();
   const session = new EditorSession(unusedReader(), unusedWriter(), output);
-  return { output, cli: Cli.createDefault(session, BuiltinShapes.createFactory(), output) };
+  return { output, cli: buildBuiltinCli(session, output) };
 }
 
 describe('Cli', () => {

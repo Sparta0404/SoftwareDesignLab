@@ -2,16 +2,22 @@
   "name": "svg-editor",
   "version": "0.1.0",
   "description": "SVG editor CLI",
-  "main": "dist/main.js",
+  "main": "dist/src/main.js",
+  "workspaces": [
+    "plugins/*"
+  ],
   "directories": {
     "doc": "doc"
   },
   "scripts": {
     "build": "tsc",
-    "cli": "tsc && node dist/main.js",
-    "lint:deps": "depcruise src --config .dependency-cruiser.cjs",
+    "cli": "tsc && node dist/src/main.js",
+    "lint:deps": "depcruise src plugins --config .dependency-cruiser.cjs",
+    "metrics": "node scripts/metrics.mjs",
+    "pretest": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "verify:diff": "node scripts/verify-diff.mjs"
   },
   "repository": {
     "type": "git",
